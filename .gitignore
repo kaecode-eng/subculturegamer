@@ -1,0 +1,20 @@
+# Local caches and disposable render artifacts
+__pycache__/
+tmp/
+*.pyc
+
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+
+# Credentials must remain outside this repository.
+.env
+.env.*
+!.env.example
+credentials.json
+token.json
+
+# Machine-specific application settings and scans
+.claude/
+.obsidian/
+scan_result.txt
