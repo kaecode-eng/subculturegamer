@@ -4,10 +4,16 @@ url: https://subculturegamer.com/ux-memory/
 published: 2023-04-27
 categories: []
 tags: ["콘텐츠"]
-related_posts: []
-wiki_refs: []
-series: ""
-series_order: null
+related_posts:
+  - 2026-11-11-gamers-brain-series
+  - 2023-04-25-ux-perception
+  - ux-attention
+  - 2023-05-01-ux-motivation
+wiki_refs:
+  - wiki/series-threads/gamers-brain-series
+  - wiki/concepts/onboarding-design
+series: "게이머의 뇌"
+series_order: 2
 ---
 
 ## 들어가는 글

@@ -4,10 +4,16 @@ url: https://subculturegamer.com/ux-attention/
 published: 2023-04-29
 categories: []
 tags: ["콘텐츠"]
-related_posts: []
-wiki_refs: []
-series: ""
-series_order: null
+related_posts:
+  - 2026-11-11-gamers-brain-series
+  - 2023-04-25-ux-perception
+  - ux-memory
+  - 2023-05-01-ux-motivation
+wiki_refs:
+  - wiki/series-threads/gamers-brain-series
+  - wiki/concepts/onboarding-design
+series: "게이머의 뇌"
+series_order: 3
 ---
 
 > 이번 글은 UX디자인 서적, ‘게이머의 뇌(The Gamer’s Brain)’의 내용 일부를 주제로 한 연재글입니다. UX디자인은 사용자에 대한 이해를 제1 원칙으로 삼는 인간 중심 디자인입니다. 따라서 UX디자인의 뿌리는, 인간에 대한 이해일 것입니다. 이번 글에서는 인간의 인지 능력 중에서 ‘주의(Attention)’에 관해 다룹니다.

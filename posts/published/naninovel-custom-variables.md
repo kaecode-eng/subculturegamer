@@ -1,6 +1,6 @@
 ---
 title: "나니노벨 Custom Variables"
-url: https://subculturegamer.com/naninovel-custom-variables/
+url: https://subculturegamer.com/naninovel-custom-variables-2/
 published: 2025-01-05
 categories: []
 tags: ["나니노벨"]

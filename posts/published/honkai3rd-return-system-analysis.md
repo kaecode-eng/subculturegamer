@@ -4,8 +4,12 @@ url: https://subculturegamer.com/honkai3rd-return-system-analysis/
 published: 2023-04-19
 categories: []
 tags: ["게임 분석"]
-related_posts: []
-wiki_refs: []
+related_posts:
+  - 2026-04-29-honkai3rd-return-system-reverse-design
+  - 2023-04-11-honkai-3rd-return-system-reverse-design-step-1
+wiki_refs:
+  - wiki/games/honkai-impact-3rd
+  - wiki/series-threads/honkai3rd-return-system-reverse-design-series
 series: ""
 series_order: null
 ---
