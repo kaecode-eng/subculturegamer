@@ -1,6 +1,6 @@
 # 연재 시리즈 트래커
 
-> 2026-10-04 기준 업데이트
+> 2026-11-12 기준 업데이트 (10/8 이후 블로그 변경 반영)
 
 ---
 
@@ -24,6 +24,8 @@
 - [x] 2편: NDC 2026 내러티브 디자인 인사이트 3가지 (`ndc-2026-insights-from-3-session.md`) — 2026-06-20
 - [x] 실무편: LLM 교차검증 워크플로우 (`2026-07-19-game-planning-ai-cross-validation-gpt-claude.md`) — 2026-07-19
 - [x] 실무편: 기획자가 바이브 코딩으로 프로토타입과 반복 업무 도구를 만드는 이유 (`2026-10-04-game-designer-vibe-coding.md`) — 2026-10-04
+- [x] 제작기: 기획자 혼자, 하루 만에 ComfyUI로 비주얼노벨 스탠딩 한 벌 만들기 (`2026-10-31-comfyui-visual-novel-standing-sprite.md`) — 2026-10-31
+- [x] 제작기: Claude Code와 ComfyUI로 만든 비주얼노벨 버티컬 슬라이스 회고 (`2026-11-08-claude-code-comfyui-visual-novel-retrospective.md`) — 2026-11-08
 - [ ] **3편: 다음 콘퍼런스/업계 AI 동향** ← 시리즈 지속 가능
 - 연결: [[wiki/concepts/narrative-design.md]], [[wiki/concepts/ai-game-design.md]], [[wiki/concepts/vibe-coding-for-game-design.md]]
 
@@ -43,7 +45,11 @@
 - 연결: [[wiki/concepts/narrative-design.md]], [[wiki/series-threads/game-analysis-character-and-narrative-hub.md]]
 
 ### 독립 발행 기록
-**상태**: 연재에 속하지 않는 일상·개인 IT 경험 글
+**상태**: 연재에 속하지 않는 일상·리뷰·행사 후기 글
+- [x] 「룩백」 2026 실사판 영화 후기 (`2026-10-08-lookback-2026-movie-review.md`) — 2026-10-08
+- [x] 극장판 디지몬 어드벤처 리뷰 (`2026-10-18-digimon-adventure-movie-review.md`) — 2026-10-18
+- [x] 디거(Digger) 영화 후기 (`2026-10-25-digger-movie-review.md`) — 2026-10-25
+- [x] GAME DAYS 2026 1일차 후기: 콘솔게임 개발자 컨퍼런스 (`2026-11-09-game-days-2026-k-console-conference-review.md`) — 2026-11-09
 - [x] Xiaomi 17 Ultra SKT 번호이동 철회와 스마텔 eSIM 재개통 후기 (`2026-08-30-xiaomi-17-ultra-skt-porting-cancellation.md`) — 2026-08-30
 - 연결: [[wiki/concepts/mobile-carrier-switching-user-experience.md]]
 
@@ -80,6 +86,15 @@
 - [ ] 6편: 설정 바이블 실전 작성
 - 연결: [[wiki/series-threads/setting-designer-series.md]]
 
+### 게임 연출 시리즈 → 1편 통합 (비공개 검토 대기)
+**상태**: 기존 5편을 통합본 1편(블로그 ID 68)으로 합침. 새 섬네일 필요, 공개는 사용자 승인 후
+- 기존 URL은 Redirection으로 통합본에 리다이렉트 설정 완료
+- 저장소 기록: `game-presenment-5-elements.md`(공개 URL 없음), `posts/drafts/game-presentation-*` 7편
+- 통합본 공개 시 `/register`로 등록하고 위 파일들의 처리(보관/삭제)를 결정
+- 연결: [[wiki/series-threads/game-direction-and-subculture-character-hub.md]]
+
+---
+
 ### 미장센 시리즈
 **상태**: 3편 완료, 확장 가능
 - [x] 도입: 게임개발자가 미장센을 알아야 하는 까닭
@@ -94,10 +109,21 @@
 ## 완결된 시리즈
 
 ### 퀘스트 디자인 시리즈 ✓
-6편 완결 (2026-03)
+6편 완결 (2026-03) + 허브 글 공개 (2026-11-11, `/quest-design-series/`, `2026-11-11-quest-design-series.md`)
 - 1편: 퀘스트의 역할 / 2편: 4대 기둥 / 3편: 좋은 퀘스트 기준
 - 4-6편: 실무 기획 가이드 I~III
 - 연결: [[wiki/series-threads/quest-design-series.md]]
+
+### 게이머의 뇌 시리즈 ✓
+4편 완결 (2023-04~05) + 허브 글 공개 (2026-11-11, `/gamers-brain-series/`)
+- 1편 지각 (`2023-04-25-ux-perception.md`) / 2편 기억 (`ux-memory.md`) / 3편 주의 (`ux-attention.md`) / 4편 동기 (`2023-05-01-ux-motivation.md`)
+- 2026-11: 1~4편 섬네일을 책 표지로 통일
+- 연결: [[wiki/series-threads/gamers-brain-series.md]], [[wiki/concepts/onboarding-design.md]]
+
+### 붕괴 3rd 복귀 시스템 역기획 시리즈 ✓
+허브(2026-04-29) + 데이터 정리 1~4편(2023-04 날짜로 2026-11 공개) + 분석편(`honkai3rd-return-system-analysis.md`)
+- 섬네일 통일 완료, 허브에서 엑셀 예제 제공
+- 연결: [[wiki/series-threads/honkai3rd-return-system-reverse-design-series.md]], [[wiki/games/honkai-impact-3rd.md]]
 
 ### 붕괴: 스타레일 온보딩 시리즈 ✓
 3편 완결 (2023-05)
@@ -121,3 +147,10 @@
 ### 붕괴3rd 데일리/위클리 루틴 시리즈 ✓
 2편 완결 (2023-07~08)
 - 연결: [[wiki/games/honkai-impact-3rd.md]]
+
+---
+
+## 허브 후보 (제안 상태)
+
+- 붕괴: 스타레일 허브 (8편): 온보딩 1~3, 이벤트 UI/UX, 필살기 연출, 반디 컨셉 아트, 아케론 스타 시스템, 페나코니 메타포 → [[wiki/games/honkai-star-rail.md]]
+- 창세기전 템페스트 허브 (5편): 게임 분석 1~3, 캐릭터 분석, 포스트모템 → [[wiki/series-threads/genesis-tempest-analysis-series.md]]

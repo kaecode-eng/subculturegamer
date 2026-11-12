@@ -14,10 +14,13 @@ related_posts:
   - 2026-08-23-game-concept-pitch-guide.md
   - 2026-09-13-game-design-presentation-listener-strategy.md
   - 2026-10-04-game-designer-vibe-coding.md
+  - 2024-05-07-stella-knight.md
+  - 2026-04-29-honkai3rd-return-system-reverse-design.md
 related_wiki:
   - wiki/concepts/mda-framework.md
   - wiki/concepts/vibe-coding-for-game-design.md
-last_updated: 2026-10-04
+  - wiki/series-threads/honkai3rd-return-system-reverse-design-series.md
+last_updated: 2026-11-12
 ---
 
 아이디어를 문서로 정리하고, 협업 파트너를 설득해 실제 개발까지 옮기는 기획자의 독서 경로다.
@@ -25,3 +28,9 @@ last_updated: 2026-10-04
 ## 읽는 순서
 
 [[posts/published/game-design-pillars]] → [[posts/published/10-page-concept-documents]] → [[posts/published/2026-08-01-game-design-document-vs-proposal]] → [[posts/published/2026-08-23-game-concept-pitch-guide]] → [[posts/published/2026-09-13-game-design-presentation-listener-strategy]] → [[posts/published/2026-10-04-game-designer-vibe-coding]] → [[posts/published/1-page-proposal-for-game-designer]] → [[posts/published/fast-feedback]] 순으로 읽는다. 제안서와 기획서의 역할을 구분하고, 대표 장면과 청자별 발표 순서로 아이디어를 설득한 뒤, 작은 프로토타입으로 본 개발 전의 복잡성과 오류를 검증하는 흐름이다. 협업 도구가 필요할 때만 에셋 구입·팀 관리·SaaS 글로 확장한다.
+
+## 2026-11 추가 연결
+
+- **역기획서 실전**: 붕괴 3rd 복귀 시스템 역기획 허브. 감상문이 아닌 데이터 중심 구현 문서로 쓰는 방법 → [[wiki/series-threads/honkai3rd-return-system-reverse-design-series.md]]
+- **제안서 실전 사례**: `2024-05-07-stella-knight.md`. 쿡앱스 면접 과제로 발표한 「스텔라 나이츠」 일본 현지화 제안서를 '애착'이라는 키워드 하나로 진단 → 전략 → 5단계 개선안 → 다이얼로그 시스템 개선으로 정리했다. 2026-11에 내용을 보강해 공개했다.
+- `cowork-asana.md`는 NDA 검토로 저장소에서 제거했다(2026-11-12). 블로그 공개 여부는 별도 결정 대기.

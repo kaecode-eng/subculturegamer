@@ -9,9 +9,11 @@ related_posts:
   - game-quest-design-episode-planning-guide.md
   - game-quest-design-episode-planning-guide-2.md
   - game-quest-design-episode-planning-guide-3.md
+  - 2026-11-11-quest-design-series.md
 related_wiki:
   - wiki/concepts/quest-design.md
-last_updated: 2026-07-17
+  - wiki/series-threads/gamers-brain-series.md
+last_updated: 2026-11-12
 ---
 
 ## 시리즈 개요
@@ -34,3 +36,8 @@ last_updated: 2026-07-17
 **완결** (2026-03 기준). 후속 확장 가능성:
 - 특정 게임의 퀘스트 설계 심층 분석 (블루 아카이브, 페르소나 3 등)
 - 퀘스트 기획서 템플릿 공개
+
+## 허브 글 (2026-11-11 공개)
+
+- `2026-11-11-quest-design-series.md` (`/quest-design-series/`, ID 25400): 1~6편을 **1부 퀘스트 이해하기(1~3편)**와 **2부 퀘스트 기획 실무(4~6편)**로 묶어 안내한다. 경험자는 2부부터 읽어도 된다고 안내하며, 추천 독자로 퀘스트·내러티브 지망생, 주니어 기획자, 시나리오 라이터를 든다.
+- 함께 읽을 시리즈로 [[wiki/series-threads/gamers-brain-series.md]] 허브와 서로 연결되어 있다.
