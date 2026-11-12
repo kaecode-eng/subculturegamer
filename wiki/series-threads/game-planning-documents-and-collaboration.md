@@ -16,6 +16,7 @@ related_posts:
   - 2026-10-04-game-designer-vibe-coding.md
   - 2024-05-07-stella-knight.md
   - 2026-04-29-honkai3rd-return-system-reverse-design.md
+  - 2024-08-04-cowork-asana.md
 related_wiki:
   - wiki/concepts/mda-framework.md
   - wiki/concepts/vibe-coding-for-game-design.md
@@ -33,4 +34,4 @@ last_updated: 2026-11-12
 
 - **역기획서 실전**: 붕괴 3rd 복귀 시스템 역기획 허브. 감상문이 아닌 데이터 중심 구현 문서로 쓰는 방법 → [[wiki/series-threads/honkai3rd-return-system-reverse-design-series.md]]
 - **제안서 실전 사례**: `2024-05-07-stella-knight.md`. 쿡앱스 면접 과제로 발표한 「스텔라 나이츠」 일본 현지화 제안서를 '애착'이라는 키워드 하나로 진단 → 전략 → 5단계 개선안 → 다이얼로그 시스템 개선으로 정리했다. 2026-11에 내용을 보강해 공개했다.
-- `cowork-asana.md`는 NDA 검토로 저장소에서 제거했다(2026-11-12). 블로그 공개 여부는 별도 결정 대기.
+- `2024-08-04-cowork-asana.md`: 협업툴 Asana 시리즈 3편 "협업툴을 바꾸자고 설득하는 법". 사내 자료를 걷어내고 도입 설득기로 다시 써서 2026-11-12 재공개했다(구 `cowork-asana.md`는 NDA 검토로 히스토리에서 제거). 니즈 우선순위 → 후보 압축 → +알파/−해소 두 방어 논리는 제안서 설득 구조의 실전 사례다.

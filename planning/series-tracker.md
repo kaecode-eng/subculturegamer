@@ -90,7 +90,7 @@
 **상태**: 공개 2편 + 비공개 3편을 5편 연재 + 허브로 재구성. 체크리스트: `planning/asana-series-publish-checklist.md`
 - [x] 1편: 『관리자』로서 우리는 잘 하고 있는걸까 (`manager-cowork.md`)
 - [x] 2편: 우리 프로젝트에 딱 맞는 「협업툴」 찾기 (`saas-cowork.md`)
-- [ ] 3편: 협업툴을 바꾸자고 설득하는 법 (초안 `posts/drafts/2026-11-12-trello-to-asana-adoption-story.md`, 블로그 ID 10345 본문 교체)
+- [x] 3편: 협업툴을 바꾸자고 설득하는 법 (`2024-08-04-cowork-asana.md`) — 2026-11-12 재공개
 - [ ] 4편: 협업툴 Asana 실무자 사용 가이드 (비공개)
 - [ ] 5편: 협업툴 Asana 관리자 사용 가이드 (비공개)
 - [ ] 허브 (초안 `posts/drafts/2026-11-12-asana-cowork-series.md`)

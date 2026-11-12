@@ -8,7 +8,7 @@
 |---|---|---|---|
 | 1편 | 『관리자』로서 우리는 잘 하고 있는걸까 (`/manager-cowork/`, ID 9790) | 공개 | 하단에 시리즈 목차 링크 추가 |
 | 2편 | 우리 프로젝트에 딱 맞는 「협업툴」 찾기 (`/saas-cowork/`, ID 9779) | 공개 | 보드 캡처 삭제 완료(2026-11-12), 시리즈 목차 링크 추가 |
-| 3편 | 협업툴을 바꾸자고 설득하는 법 (`/cowork-asana/`, ID 10345) | 비공개 | 초안 `posts/drafts/2026-11-12-trello-to-asana-adoption-story.md`로 본문 교체 |
+| 3편 | 협업툴을 바꾸자고 설득하는 법 (`/cowork-asana/`, ID 10345) | **공개 (2026-11-12)** | 홈 슬라이드 위치 조정, 태그 슬러그 `teamwork` |
 | 4편 | 협업툴 Asana 실무자 사용 가이드 (`/asana-for-worker-cowork-guide/`) | 비공개 | 아래 확인 사항 |
 | 5편 | 협업툴 Asana 관리자 사용 가이드 (`/asana-for-manager-cowork-guide/`) | 비공개 | 아래 확인 사항 |
 | 허브 | 협업툴 Asana 시리즈 (`/asana-cowork-series/` 추천) | 초안 | `posts/drafts/2026-11-12-asana-cowork-series.md`, 3~5편 공개 후 발행 |

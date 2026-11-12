@@ -1,6 +1,6 @@
 ---
 title: "협업툴을 바꾸자고 설득하는 법: 트렐로에서 Asana로 옮긴 20명 팀의 도입기"
-status: draft
+status: ready
 target_date:
 based_on_wiki:
   - wiki/series-threads/game-planning-documents-and-collaboration
