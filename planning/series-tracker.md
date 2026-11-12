@@ -86,6 +86,18 @@
 - [ ] 6편: 설정 바이블 실전 작성
 - 연결: [[wiki/series-threads/setting-designer-series.md]]
 
+### 협업툴 Asana 시리즈 (공개 준비 중)
+**상태**: 공개 2편 + 비공개 3편을 5편 연재 + 허브로 재구성. 체크리스트: `planning/asana-series-publish-checklist.md`
+- [x] 1편: 『관리자』로서 우리는 잘 하고 있는걸까 (`manager-cowork.md`)
+- [x] 2편: 우리 프로젝트에 딱 맞는 「협업툴」 찾기 (`saas-cowork.md`)
+- [ ] 3편: 협업툴을 바꾸자고 설득하는 법 (초안 `posts/drafts/2026-11-12-trello-to-asana-adoption-story.md`, 블로그 ID 10345 본문 교체)
+- [ ] 4편: 협업툴 Asana 실무자 사용 가이드 (비공개)
+- [ ] 5편: 협업툴 Asana 관리자 사용 가이드 (비공개)
+- [ ] 허브 (초안 `posts/drafts/2026-11-12-asana-cowork-series.md`)
+- 연결: [[wiki/series-threads/game-planning-documents-and-collaboration.md]]
+
+---
+
 ### 게임 연출 시리즈 → 1편 통합 (비공개 검토 대기)
 **상태**: 기존 5편을 통합본 1편(블로그 ID 68)으로 합침. 새 섬네일 필요, 공개는 사용자 승인 후
 - 기존 URL은 Redirection으로 통합본에 리다이렉트 설정 완료
