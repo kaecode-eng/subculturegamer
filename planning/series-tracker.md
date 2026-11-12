@@ -153,4 +153,4 @@
 ## 허브 후보 (제안 상태)
 
 - 붕괴: 스타레일 허브 (8편): 온보딩 1~3, 이벤트 UI/UX, 필살기 연출, 반디 컨셉 아트, 아케론 스타 시스템, 페나코니 메타포 → [[wiki/games/honkai-star-rail.md]]
-- 창세기전 템페스트 허브 (5편): 게임 분석 1~3, 캐릭터 분석, 포스트모템 → [[wiki/series-threads/genesis-tempest-analysis-series.md]]
+- 창세기전 템페스트 허브 (4편, 이름 확정): 게임 분석 1~3, 캐릭터 분석. 포스트모템은 허브에서 제외 → [[wiki/series-threads/genesis-tempest-analysis-series.md]]
