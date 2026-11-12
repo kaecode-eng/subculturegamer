@@ -1,7 +1,7 @@
 ---
 title: "협업툴 Asana 시리즈: 도입 설득부터 실무자·관리자 사용법까지"
-status: draft
-target_date:
+status: ready
+target_date: 2026-11-12  # 발행 완료: https://subculturegamer.com/asana-cowork-series/ (ID 25496), /register 대기
 based_on_wiki:
   - wiki/series-threads/game-planning-documents-and-collaboration
 related_posts:
