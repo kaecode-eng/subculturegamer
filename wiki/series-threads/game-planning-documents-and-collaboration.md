@@ -10,7 +10,6 @@ related_posts:
   - asset-buying-cowork.md
   - manager-cowork.md
   - saas-cowork.md
-  - cowork-asana.md
   - 2026-08-01-game-design-document-vs-proposal.md
   - 2026-08-23-game-concept-pitch-guide.md
   - 2026-09-13-game-design-presentation-listener-strategy.md

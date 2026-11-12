@@ -63,7 +63,7 @@
 | `10-page-concept-documents` | `game-design-pillars`, `1-page-proposal-for-game-designer`, `fast-feedback` | 컨셉 → 설득 → 피드백 |
 | `1-page-proposal-for-game-designer` | `10-page-concept-documents`, `fast-feedback`, `narrative-director-cowork-guide` | 문서와 협업 실무 |
 | `fast-feedback` | `1-page-proposal-for-game-designer`, `manager-cowork`, `saas-cowork` | 피드백을 팀 프로세스로 확장 |
-| `asset-buying-cowork` | `1-page-proposal-for-game-designer`, `manager-cowork`, `cowork-asana` | 외부 협업의 실행 도구 |
+| `asset-buying-cowork` | `1-page-proposal-for-game-designer`, `manager-cowork` | 외부 협업의 실행 도구 |
 | `dialogue-system-table` | `narrative-designer-combat-mechanics`, `game-narrative-designer-ai-survival-guide`, `narrative-designer-portfolio-guide` | 설계 역량을 커리어로 연결 |
 | `narrative-designer-combat-mechanics` | `dialogue-system-table`, `game-presenment-5-elements`, `narrative-team-postmortem` | 서사와 시스템의 접점 |
 | `game-narrative-designer-ai-survival-guide` | `ndc-2026-insights-from-3-session`, `narrative-designer-portfolio-guide`, `narrative-team-postmortem` | AI 전망 → 실무·커리어 |
