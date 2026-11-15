@@ -9,6 +9,8 @@ related_posts:
   - saas-cowork
   - 2026-08-01-game-design-document-vs-proposal
   - 1-page-proposal-for-game-designer
+  - 2025-12-25-asana-for-worker-cowork-guide
+  - 2026-11-12-asana-cowork-series
 wiki_refs:
   - wiki/series-threads/game-planning-documents-and-collaboration
 series: "협업툴 Asana"
@@ -178,4 +180,6 @@ Asana에도 보드 뷰가 있다. 보드 뷰로만 쓰면 트렐로와 거의 �
 
 이 구조는 협업툴이 아니어도 통한다. 새 문서 양식, 새 회의 방식, 새 파이프라인. 팀에 무언가를 들여오고 싶다면 무엇을 얻는지만 말하지 말고 무엇을 잃는지와 그걸 누가 메울지도 함께 말하자. 기획서보다 [제안서가 필요한 순간](https://subculturegamer.com/game-design-document-vs-proposal/)이 바로 이런 때다.
 
-다음 글에서는 도입한 Asana를 실무자가 매일 어떻게 쓰면 되는지 정리한 **실무자 사용 가이드**를 소개한다.
+다음 글에서는 도입한 Asana를 실무자가 매일 어떻게 쓰면 되는지 정리한 [실무자 사용 가이드](https://subculturegamer.com/asana-for-worker-cowork-guide/)를 소개한다.
+
+이 글은 「협업툴 Asana」 시리즈의 3편이다. 시리즈 전체 구성과 읽는 순서는 [협업툴 Asana 시리즈 안내 글](https://subculturegamer.com/asana-cowork-series/)에서 한눈에 볼 수 있다.

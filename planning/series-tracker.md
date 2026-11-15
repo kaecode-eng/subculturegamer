@@ -1,6 +1,6 @@
 # 연재 시리즈 트래커
 
-> 2026-11-12 기준 업데이트 (10/8 이후 블로그 변경 반영)
+> 2026-11-15 기준 업데이트 (10/8 이후 블로그 변경 반영, 협업툴 Asana 시리즈 완결)
 
 ---
 
@@ -86,14 +86,14 @@
 - [ ] 6편: 설정 바이블 실전 작성
 - 연결: [[wiki/series-threads/setting-designer-series.md]]
 
-### 협업툴 Asana 시리즈 (공개 준비 중)
-**상태**: 공개 2편 + 비공개 3편을 5편 연재 + 허브로 재구성. 체크리스트: `planning/asana-series-publish-checklist.md`
+### 협업툴 Asana 시리즈 (커리어)
+**상태**: 5편 완결 + 허브 (2026-11-12 전편 공개). 체크리스트: `planning/asana-series-publish-checklist.md`
 - [x] 1편: 『관리자』로서 우리는 잘 하고 있는걸까 (`manager-cowork.md`)
 - [x] 2편: 우리 프로젝트에 딱 맞는 「협업툴」 찾기 (`saas-cowork.md`)
 - [x] 3편: 협업툴을 바꾸자고 설득하는 법 (`2024-08-04-cowork-asana.md`) — 2026-11-12 재공개
-- [ ] 4편: 협업툴 Asana 실무자 사용 가이드 (비공개)
-- [ ] 5편: 협업툴 Asana 관리자 사용 가이드 (비공개)
-- [ ] 허브 (초안 `posts/drafts/2026-11-12-asana-cowork-series.md`)
+- [x] 4편: 협업툴 Asana 실무자 사용 가이드 (`2025-12-25-asana-for-worker-cowork-guide.md`) — 2026-11-12 공개
+- [x] 5편: 협업툴 Asana 관리자 사용 가이드 (`2026-01-08-asana-for-manager-cowork-guide.md`) — 2026-11-12 공개
+- [x] 허브: 협업툴 Asana 시리즈 (`2026-11-12-asana-cowork-series.md`, `/asana-cowork-series/`) — 2026-11-12 공개. 1~5편 끝에서 허브로 연결
 - 연결: [[wiki/series-threads/game-planning-documents-and-collaboration.md]]
 
 ---
