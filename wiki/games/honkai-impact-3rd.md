@@ -9,12 +9,18 @@ related_posts:
   - honkai-3rd-concept-artbook-vol2-review.md
   - honkai-3rd-collabo-cafe.md
   - how-they-design-the-success-game.md
+  - 2026-04-29-honkai3rd-return-system-reverse-design.md
+  - 2023-04-11-honkai-3rd-return-system-reverse-design-step-1.md
+  - 2023-04-12-honkai-3rd-return-system-reverse-design-step-2.md
+  - 2023-04-13-honkai-3rd-return-system-reverse-design-step-3.md
+  - 2023-04-14-honkai-3rd-return-system-reverse-design-step-4.md
 related_wiki:
   - wiki/games/honkai-star-rail.md
   - wiki/games/brawl-stars.md
   - wiki/concepts/onboarding-design.md
   - wiki/techniques/3c-analysis.md
-last_updated: 2026-06-24
+  - wiki/series-threads/honkai3rd-return-system-reverse-design-series.md
+last_updated: 2026-11-12
 ---
 
 ## 게임 개요
@@ -37,3 +43,7 @@ last_updated: 2026-06-24
 
 - 붕괴3rd 장기 운영(7년+) 비결 분석
 - 붕괴3rd → 스타레일 세계관 연결 방식 (IP 확장 전략)
+
+## 블로그에서 다룬 각도 (2026-11 추가)
+
+- **복귀 시스템 역기획 시리즈**: 허브(2026-04-29) + 데이터 정리 1~4편 + 기존 복귀 시스템 분석을 5편으로 묶은 실전 역기획 연재. 2026-11에 1~4편을 공개하고 섬네일을 통일했다. 상세: [[wiki/series-threads/honkai3rd-return-system-reverse-design-series.md]]

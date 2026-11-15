@@ -101,7 +101,7 @@
 | 시작: 기획의 의도 정리 | `game-design-pillars.md`, `10-page-concept-documents.md` |
 | 설득: 짧은 제안서 | `1-page-proposal-for-game-designer.md` |
 | 실행: 협업과 피드백 | `fast-feedback.md`, `asset-buying-cowork.md`, `manager-cowork.md` |
-| 도구 선택 | `saas-cowork.md`, `cowork-asana.md` |
+| 도구 선택 | `saas-cowork.md` |
 
 허브 제목 후보: **게임 기획 문서와 협업: 아이디어를 실제 개발로 옮기는 순서**
 

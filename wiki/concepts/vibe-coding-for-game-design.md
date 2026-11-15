@@ -4,13 +4,14 @@ type: concept
 tags: [바이브 코딩, 생성형 AI, 프로토타이핑, 게임 기획]
 related_posts:
   - 2026-10-04-game-designer-vibe-coding.md
+  - 2026-11-08-claude-code-comfyui-visual-novel-retrospective.md
 related_wiki:
   - wiki/concepts/ai-game-design.md
   - wiki/concepts/quest-design.md
   - wiki/techniques/concentric-development.md
   - wiki/series-threads/ai-tools-for-game-development-hub.md
   - wiki/series-threads/game-planning-documents-and-collaboration.md
-last_updated: 2026-10-04
+last_updated: 2026-11-12
 ---
 
 ## 개념 설명
@@ -32,3 +33,7 @@ last_updated: 2026-10-04
 - 프로토타입에서 발견한 문제를 제작용 기획서에 되돌리는 방법
 - 개인용 바이브 코딩 도구를 팀 공용 도구로 전환할 때 필요한 문서화와 인수인계 기준
 - 퀘스트 노드 도구의 최소 기능과 데이터 교환 형식 비교
+
+## 실전 사례 (2026-11 추가)
+
+- `2026-11-08-claude-code-comfyui-visual-novel-retrospective.md`: 기획서를 Claude Code가 실행할 작업 단위로 바꾸고, 병행 개발 순서와 '방향을 규칙으로 옮기는 일'을 회고한다. 바이브 코딩 글에서 말한 "기획서 옆의 작은 프로토타입"을 버티컬 슬라이스 규모로 확장한 사례다.

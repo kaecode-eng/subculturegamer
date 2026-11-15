@@ -1,6 +1,6 @@
 ---
 title: "화합의 도시 「페나코니」의 메타포 분석"
-url: https://subculturegamer.com/penacony-symbol-metaphor/
+url: https://subculturegamer.com/penaconey-symbol-metaphor/
 published: 2024-04-28
 categories: []
 tags: ["게임 디자인"]

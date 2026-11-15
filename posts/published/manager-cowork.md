@@ -6,8 +6,8 @@ categories: []
 tags: ["커리어"]
 related_posts: []
 wiki_refs: []
-series: ""
-series_order: null
+series: "협업툴 Asana"
+series_order: 1
 ---
 
 ---

@@ -1,6 +1,6 @@
 ---
 title: "다이얼로그 시스템 테이블 구조 정리 - 내러티브 디자이너를 위한 설계 가이드"
-url: https://subculturegamer.com/dialogue-system-table/
+url: https://subculturegamer.com/game-dialogue-system-table-design/
 published: 2024-04-14
 categories: []
 tags: ["게임 디자인"]

@@ -1,6 +1,6 @@
 ---
 title: "엣지러너가 보여준 차세대 SF의 존재감"
-url: https://subculturegamer.com/cyberpunk-edgerunner-sf/
+url: https://subculturegamer.com/cyberpunk-edgerunner-next-gen-sf/
 published: 2024-03-23
 categories: []
 tags: ["콘텐츠"]
