@@ -99,4 +99,4 @@
 1. 옛 URL 6개(`/game-directing-characters/`, `/game-directing-stage-directions/`, `/game-directing-backgrounds/`, `/game-directing-sound-effects/`, `/game-directing-bgm/`, `/game-presenment-5-elements/`)와 `/game-scenario-directing-elements/`의 Redirection 목적지를 `/what-is-game-story-directing/`으로 바꾼다.
 2. 68과 옛 연출 5편(140, 170, 185, 201, 215)을 휴지통으로 보낸다(사용자 승인 후).
 3. 저장소 정리: `posts/drafts/game-presentation-*.md` 7편은 보관 또는 삭제, `posts/published/game-presenment-5-elements.md`는 공개 URL이 없으므로 삭제하거나 25 파일에 흡수. `planning/series-tracker.md`의 「게임 연출 시리즈 → 1편 통합」 항목 갱신.
-4. 25를 저장소에 다시 등록(`posts/published/2026-07-05-what-is-game-story-directing.md` 갱신)하고 태그를 점검한다(현재 사이트 태그 확인 후 `연출`, `내러티브 디자인` 검토).
+4. 25를 저장소에 다시 등록(`posts/published/2026-07-05-what-is-game-story-directing.md` 갱신)하고 태그는 이미 `내러티브 디자인`, `연출`(2026-11-16 확인)이라 바꿀 필요가 없다.
