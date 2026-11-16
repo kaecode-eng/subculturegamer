@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.2.0
+ * Version: 1.3.0
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -173,7 +173,7 @@ add_filter( 'render_block_core/comments', function ( $html, $parsed = null, $ins
 	$bubble   = '<svg class="sg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4C6.8 4 3 7.3 3 11.3c0 2.2 1.1 4.1 2.9 5.5L5.3 20l3.5-1.8c1 .3 2.1.4 3.2.4 5.2 0 9-3.3 9-7.3S17.2 4 12 4z"/><circle cx="8.5" cy="11.3" r=".9"/><circle cx="12" cy="11.3" r=".9"/><circle cx="15.5" cy="11.3" r=".9"/></svg>';
 	$bar      = sprintf(
 		'<div class="sg-actions">'
-		. '<button type="button" class="sg-like" data-post="%1$d" aria-pressed="false">%2$s<span class="sg-like-num">%3$s</span><span class="sg-like-label">좋아요</span></button>'
+		. '<button type="button" class="sg-like" data-post="%1$d" data-title="%7$s" aria-pressed="false">%2$s<span class="sg-like-num">%3$s</span><span class="sg-like-label">좋아요</span></button>'
 		. '<a class="sg-cmt" href="#%4$s">%5$s<span>댓글</span><span class="sg-cmt-num">%6$d</span></a>'
 		. '</div>',
 		$post_id,
@@ -181,7 +181,8 @@ add_filter( 'render_block_core/comments', function ( $html, $parsed = null, $ins
 		$likes ? number_format_i18n( $likes ) : '',
 		$comments ? 'comments' : 'respond',
 		$bubble,
-		$comments
+		$comments,
+		esc_attr( wp_strip_all_tags( get_the_title( $post_id ) ) )
 	);
 	// 댓글 블록 래퍼 <div class="wp-block-comments"> 바로 안쪽 맨 위에 넣는다
 	$out = preg_replace_callback(
@@ -269,7 +270,7 @@ add_action( 'wp_enqueue_scripts', function () {
 #commentform .sg-cf-submit:not(:disabled):hover{opacity:.88}
 @media (max-width:600px){#commentform .comment-form-author,#commentform .comment-form-email{width:100%!important;padding-right:16px}}
 CSS;
-	wp_register_style( 'sg-comments', false, array(), '1.1.0' );
+	wp_register_style( 'sg-comments', false, array(), '1.3.0' );
 	wp_enqueue_style( 'sg-comments' );
 	wp_add_inline_style( 'sg-comments', $css );
 
@@ -289,8 +290,16 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.sg-like[data-post]').forEach(function(btn){
     var num=btn.querySelector('.sg-like-num'),busy=false;
     function render(r){btn.setAttribute('aria-pressed',r.liked?'true':'false');btn.setAttribute('aria-label',r.liked?'좋아요 취소':'좋아요');num.textContent=r.count>0?r.count.toLocaleString('ko-KR'):'';}
+    var server=null; /* 서버가 확인해 준 마지막 상태 */
     function call(mode){var b=new URLSearchParams({action:'sg_like',mode:mode,post:btn.dataset.post});
-      return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){if(j&&j.success)render(j.data);});}
+      return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){
+        if(!j||!j.success)return null;render(j.data);var prev=server;server=j.data;return {prev:prev,now:j.data};});}
+    /* GA4 이벤트: 서버에 실제로 반영된 경우에만 전송 (Site Kit 의 gtag 사용) */
+    function track(res){
+      if(!res||!res.prev||res.prev.liked===res.now.liked||typeof window.gtag!=='function')return;
+      window.gtag('event',res.now.liked?'post_like':'post_unlike',{
+        post_id:String(btn.dataset.post),post_title:btn.dataset.title||document.title,like_count:res.now.count});
+    }
     if(!ajax)return;
     call('get').catch(function(){});
     btn.addEventListener('click',function(){
@@ -298,7 +307,7 @@ document.addEventListener('DOMContentLoaded',function(){
       var on=btn.getAttribute('aria-pressed')!=='true',n=parseInt((num.textContent||'0').replace(/\D/g,''),10)||0;
       render({liked:on,count:Math.max(0,n+(on?1:-1))});
       if(on){btn.classList.remove('is-pop');void btn.offsetWidth;btn.classList.add('is-pop');}
-      call('toggle').catch(function(){}).then(function(){busy=false;});
+      call('toggle').then(track).catch(function(){}).then(function(){busy=false;});
     });
   });
   /* 댓글 폼 */
@@ -310,7 +319,7 @@ document.addEventListener('DOMContentLoaded',function(){
   t.addEventListener('input',u);u();
 });
 JS;
-	wp_register_script( 'sg-comments', false, array(), '1.1.0', true );
+	wp_register_script( 'sg-comments', false, array(), '1.3.0', true );
 	wp_enqueue_script( 'sg-comments' );
 	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
 	wp_add_inline_script( 'sg-comments', $js );
