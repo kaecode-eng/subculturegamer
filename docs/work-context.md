@@ -7,7 +7,7 @@
 - 공개 저장소 점검: 커밋 히스토리에 키·토큰 없음. `posts/published/cowork-asana.md`(사내 Asana 도입 제안서 슬라이드·내부 워크스페이스 캡처 포함)를 저장소와 전체 히스토리에서 제거하고 `main`을 force-push했다. 블로그의 해당 글(ID 10345)은 여전히 공개 상태이며, 비공개 전환 여부는 사용자 결정 대기.
 - 10/8 이후 블로그 변경 반영: 누락 공개 글 16편 등록(퀘스트 디자인·게이머의 뇌 허브, 게이머의 뇌 1·4편, 스텔라 나이츠, 붕괴 3rd 역기획 허브와 1~4편, 10/8 이후 신규 글 6편). 슬러그가 바뀐 4편은 파일명을 유지하고 `url`만 갱신했다.
 - 새 위키: `wiki/series-threads/gamers-brain-series.md`, `wiki/series-threads/honkai3rd-return-system-reverse-design-series.md`. 연재 현황은 `planning/series-tracker.md` 참고.
-- 비공개라 등록하지 못한 글: 연출 통합본(68), 대화 UI·폰트(445), 이모티콘(352), TF(19510), Asana 매니저(22197), Asana 실무자(13490). 공개 후 `/register`로 등록한다.
+- 비공개라 등록하지 못한 글: 연출 통합본(68), 대화 UI·폰트(445), 이모티콘(352), TF(19510), Asana 매니저(22197), Asana 실무자(13490). 공개 후 `/register`로 등록한다. 68·445·352·19510의 태그는 `planning/taxonomy/2026-11-16-private-posts-tags.md` 3장의 "`/register` 때 판정" 항목을 함께 결정한다.
 - 이 세션 환경은 subculturegamer.com 읽기가 가능한 `subculturegamer` 환경을 사용한다. 쓰기(API 인증)는 없다.
 
 > 갱신일: 2026-10-08 (Asia/Seoul)
