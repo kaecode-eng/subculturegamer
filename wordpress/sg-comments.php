@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.3.1
+ * Version: 1.3.2
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -369,18 +369,22 @@ add_filter( 'manage_edit-post_sortable_columns', function ( $cols ) {
 	return $cols;
 } );
 
-// 좋아요를 한 번도 받지 않은 글(메타 없음)도 정렬에서 빠지지 않도록 LEFT JOIN 형태로 정렬
-add_action( 'pre_get_posts', function ( $q ) {
-	if ( ! is_admin() || ! $q->is_main_query() || 'sg_likes' !== $q->get( 'orderby' ) ) {
-		return;
+// 좋아요 순 정렬: _sg_likes 메타만 LEFT JOIN 해서 정렬한다(메타가 없는 글은 0으로 취급).
+// meta_query(OR + NOT EXISTS) 방식은 다른 메타 값(_edit_lock 등)으로 정렬되는 문제가 있어 쓰지 않는다.
+function sg_like_is_sort_query( $q ) {
+	return is_admin() && $q->is_main_query() && 'sg_likes' === $q->get( 'orderby' );
+}
+
+add_filter( 'posts_clauses', function ( $clauses, $q ) {
+	if ( ! sg_like_is_sort_query( $q ) ) {
+		return $clauses;
 	}
-	$q->set( 'meta_query', array(
-		'relation' => 'OR',
-		'sg_has'   => array( 'key' => '_sg_likes', 'type' => 'NUMERIC' ),
-		'sg_none'  => array( 'key' => '_sg_likes', 'compare' => 'NOT EXISTS' ),
-	) );
-	$q->set( 'orderby', array( 'sg_has' => $q->get( 'order' ) ?: 'DESC', 'date' => 'DESC' ) );
-} );
+	global $wpdb;
+	$order              = 'ASC' === strtoupper( (string) $q->get( 'order' ) ) ? 'ASC' : 'DESC';
+	$clauses['join']   .= " LEFT JOIN {$wpdb->postmeta} AS sg_lk ON ( sg_lk.post_id = {$wpdb->posts}.ID AND sg_lk.meta_key = '_sg_likes' )";
+	$clauses['orderby'] = "CAST( COALESCE( sg_lk.meta_value, '0' ) AS UNSIGNED ) {$order}, {$wpdb->posts}.post_date DESC";
+	return $clauses;
+}, 10, 2 );
 
 add_action( 'admin_head-edit.php', function () {
 	echo '<style>.column-sg_likes{width:7em;text-align:center!important}</style>';
