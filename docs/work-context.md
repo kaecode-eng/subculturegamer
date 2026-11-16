@@ -8,7 +8,7 @@
 - 10/8 이후 블로그 변경 반영: 누락 공개 글 16편 등록(퀘스트 디자인·게이머의 뇌 허브, 게이머의 뇌 1·4편, 스텔라 나이츠, 붕괴 3rd 역기획 허브와 1~4편, 10/8 이후 신규 글 6편). 슬러그가 바뀐 4편은 파일명을 유지하고 `url`만 갱신했다.
 - 새 위키: `wiki/series-threads/gamers-brain-series.md`, `wiki/series-threads/honkai3rd-return-system-reverse-design-series.md`. 연재 현황은 `planning/series-tracker.md` 참고.
 - 비공개라 등록하지 못한 글: 연출 통합본(68), 대화 UI·폰트(445), 이모티콘(352), TF(19510), Asana 매니저(22197), Asana 실무자(13490). 공개 후 `/register`로 등록한다. 68·445·352·19510의 태그는 `planning/taxonomy/2026-11-16-private-posts-tags.md` 3장의 "`/register` 때 판정" 항목을 함께 결정한다.
-- 이 세션 환경은 subculturegamer.com 읽기가 가능한 `subculturegamer` 환경을 사용한다. 쓰기(API 인증)는 없다.
+- 이 세션 환경은 subculturegamer.com 읽기가 가능한 `subculturegamer` 환경을 사용한다. 쓰기(API 인증)는 없다. 2026-11-16: 클라우드 환경 비밀값을 Basic 형식(사용자명 + 응용 프로그램 비밀번호)으로 다시 저장했지만 여전히 401 `rest_not_logged_in`. REST 인덱스에 application-passwords가 켜져 있고 `?rest_route=` 경로도 같은 결과라, Authorization 헤더가 서버(LiteSpeed/cPanel) 단계에서 사라지는 것으로 본다. 사이트 쓰기는 데스크톱 앱 내장 브라우저(관리자 로그인 세션)로 하거나, 호스팅에 헤더 전달을 요청해 해결한 뒤 REST로 한다.
 
 > 갱신일: 2026-10-08 (Asia/Seoul)
 > 근거 구분: 아래 보완 내용은 2026-10-08에 직접 읽은 AGENTS.md, 기존 인계 문서, 현재 대화와 작업 시작 시 Git 상태를 근거로 한다. 기존 인계의 다른 파일·통계·커밋 기록은 이번 보완에서 재검증하지 않았다. 이전 세션의 대화 내용은 제공되지 않았으므로 추정하지 않았다.
