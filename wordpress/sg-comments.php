@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.3.0
+ * Version: 1.3.1
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -137,25 +137,24 @@ function sg_like_ajax() {
 	$keys  = is_array( $keys ) ? $keys : array();
 	$liked = in_array( $key, $keys, true );
 
-	if ( isset( $_POST['mode'] ) && 'toggle' === $_POST['mode'] ) {
-		// 같은 방문자의 연타 방지 (2초)
-		$lock = 'sg_like_lock_' . $post_id . '_' . $key;
-		if ( get_transient( $lock ) ) {
-			wp_send_json_success( array( 'count' => sg_like_count( $post_id ), 'liked' => $liked ) );
-		}
-		set_transient( $lock, 1, 2 );
-
-		if ( $liked ) {
-			$keys = array_values( array_diff( $keys, array( $key ) ) );
-		} else {
-			$keys[] = $key;
-			if ( count( $keys ) > SG_LIKE_MAX_TRACKED ) {
-				$keys = array_slice( $keys, -SG_LIKE_MAX_TRACKED );
+	// 'set' 은 원하는 최종 상태를 받는다. 같은 요청이 여러 번 와도 결과가 같아서 연타·늦은 초기화에도 상태가 뒤집히지 않는다.
+	// 방문자당 1표(IP 해시)라 연타 잠금은 두지 않는다. 'toggle' 은 이전 버전 호환용.
+	$mode = isset( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : 'get';
+	if ( 'set' === $mode || 'toggle' === $mode ) {
+		$want = 'set' === $mode ? ! empty( $_POST['liked'] ) : ! $liked;
+		if ( $want !== $liked ) {
+			if ( $want ) {
+				$keys[] = $key;
+				if ( count( $keys ) > SG_LIKE_MAX_TRACKED ) {
+					$keys = array_slice( $keys, -SG_LIKE_MAX_TRACKED );
+				}
+			} else {
+				$keys = array_values( array_diff( $keys, array( $key ) ) );
 			}
+			$liked = $want;
+			update_post_meta( $post_id, '_sg_like_keys', $keys );
+			update_post_meta( $post_id, '_sg_likes', max( 0, sg_like_count( $post_id ) + ( $liked ? 1 : -1 ) ) );
 		}
-		$liked = ! $liked;
-		update_post_meta( $post_id, '_sg_like_keys', $keys );
-		update_post_meta( $post_id, '_sg_likes', max( 0, sg_like_count( $post_id ) + ( $liked ? 1 : -1 ) ) );
 	}
 	wp_send_json_success( array( 'count' => sg_like_count( $post_id ), 'liked' => $liked ) );
 }
@@ -165,6 +164,10 @@ add_action( 'wp_ajax_nopriv_sg_like', 'sg_like_ajax' );
 add_filter( 'render_block_core/comments', function ( $html, $parsed = null, $instance = null ) {
 	$post_id = ( $instance && ! empty( $instance->context['postId'] ) ) ? (int) $instance->context['postId'] : get_the_ID();
 	if ( ! $post_id ) {
+		return $html;
+	}
+	// 같은 댓글 블록에 필터가 두 번 걸려도 바가 한 번만 들어가게 한다
+	if ( false !== strpos( $html, 'class="sg-actions"' ) ) {
 		return $html;
 	}
 	$likes    = sg_like_count( $post_id );
@@ -270,7 +273,7 @@ add_action( 'wp_enqueue_scripts', function () {
 #commentform .sg-cf-submit:not(:disabled):hover{opacity:.88}
 @media (max-width:600px){#commentform .comment-form-author,#commentform .comment-form-email{width:100%!important;padding-right:16px}}
 CSS;
-	wp_register_style( 'sg-comments', false, array(), '1.3.0' );
+	wp_register_style( 'sg-comments', false, array(), '1.3.1' );
 	wp_enqueue_style( 'sg-comments' );
 	wp_add_inline_style( 'sg-comments', $css );
 
@@ -287,29 +290,42 @@ document.addEventListener('DOMContentLoaded',function(){
   });
   /* 좋아요 */
   var ajax=window.sgComments&&sgComments.ajax;
-  document.querySelectorAll('.sg-like[data-post]').forEach(function(btn){
-    var num=btn.querySelector('.sg-like-num'),busy=false;
-    function render(r){btn.setAttribute('aria-pressed',r.liked?'true':'false');btn.setAttribute('aria-label',r.liked?'좋아요 취소':'좋아요');num.textContent=r.count>0?r.count.toLocaleString('ko-KR'):'';}
-    var server=null; /* 서버가 확인해 준 마지막 상태 */
-    function call(mode){var b=new URLSearchParams({action:'sg_like',mode:mode,post:btn.dataset.post});
-      return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){
-        if(!j||!j.success)return null;render(j.data);var prev=server;server=j.data;return {prev:prev,now:j.data};});}
-    /* GA4 이벤트: 서버에 실제로 반영된 경우에만 전송 (Site Kit 의 gtag 사용) */
-    function track(res){
-      if(!res||!res.prev||res.prev.liked===res.now.liked||typeof window.gtag!=='function')return;
-      window.gtag('event',res.now.liked?'post_like':'post_unlike',{
-        post_id:String(btn.dataset.post),post_title:btn.dataset.title||document.title,like_count:res.now.count});
-    }
-    if(!ajax)return;
-    call('get').catch(function(){});
-    btn.addEventListener('click',function(){
-      if(busy)return;busy=true;
-      var on=btn.getAttribute('aria-pressed')!=='true',n=parseInt((num.textContent||'0').replace(/\D/g,''),10)||0;
-      render({liked:on,count:Math.max(0,n+(on?1:-1))});
-      if(on){btn.classList.remove('is-pop');void btn.offsetWidth;btn.classList.add('is-pop');}
-      call('toggle').then(track).catch(function(){}).then(function(){busy=false;});
-    });
-  });
+document.querySelectorAll('.sg-like[data-post]').forEach(function(btn){
+var num=btn.querySelector('.sg-like-num');
+var server=null; /* 서버가 확인해 준 마지막 상태 */
+var want=null; /* 아직 서버에 반영되지 않은, 사용자가 마지막으로 고른 상태 */
+var busy=false;
+function render(r){btn.setAttribute('aria-pressed',r.liked?'true':'false');btn.setAttribute('aria-label',r.liked?'좋아요 취소':'좋아요');num.textContent=r.count>0?r.count.toLocaleString('ko-KR'):'';}
+function post(p){var b=new URLSearchParams(p);b.set('action','sg_like');b.set('post',btn.dataset.post);
+return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){return j&&j.success?j.data:null;});}
+/* GA4 이벤트: 서버에 실제로 반영된 경우에만 전송 (Site Kit 의 gtag 사용) */
+function track(prev,now){
+if(!prev||prev.liked===now.liked||typeof window.gtag!=='function')return;
+window.gtag('event',now.liked?'post_like':'post_unlike',{
+post_id:String(btn.dataset.post),post_title:btn.dataset.title||document.title,like_count:now.count});
+}
+/* 마지막으로 고른 상태가 서버에 반영될 때까지 한 번에 하나씩 보낸다 (연타해도 마지막 선택이 남는다) */
+function sync(){
+if(busy||want===null)return;
+if(server&&server.liked===want){want=null;render(server);return;}
+busy=true;var ok=false;
+post({mode:'set',liked:want?'1':'0'}).then(function(d){if(d){ok=true;var prev=server;server=d;track(prev,d);}}).catch(function(){}).then(function(){
+busy=false;
+if(ok&&want!==null&&server.liked!==want){sync();return;}
+want=null;if(server)render(server);
+});
+}
+if(!ajax)return;
+/* 처음 상태: 그 전에 이미 눌렀다면 클릭 결과를 우선한다 */
+post({mode:'get'}).then(function(d){if(!d||server)return;server=d;if(want===null)render(d);else sync();}).catch(function(){});
+btn.addEventListener('click',function(){
+var on=btn.getAttribute('aria-pressed')!=='true',n=parseInt((num.textContent||'0').replace(/\D/g,''),10)||0;
+want=on;
+render({liked:on,count:Math.max(0,n+(on?1:-1))});
+if(on){btn.classList.remove('is-pop');void btn.offsetWidth;btn.classList.add('is-pop');}
+sync();
+});
+});
   /* 댓글 폼 */
   var t=document.getElementById('comment'),f=document.getElementById('commentform');
   if(!t||!f)return;
@@ -319,7 +335,7 @@ document.addEventListener('DOMContentLoaded',function(){
   t.addEventListener('input',u);u();
 });
 JS;
-	wp_register_script( 'sg-comments', false, array(), '1.3.0', true );
+	wp_register_script( 'sg-comments', false, array(), '1.3.1', true );
 	wp_enqueue_script( 'sg-comments' );
 	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
 	wp_add_inline_script( 'sg-comments', $js );
