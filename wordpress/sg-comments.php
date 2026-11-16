@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.0.0
+ * Version: 1.1.0
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -91,7 +91,113 @@ add_filter( 'render_block_core/comments-title', function ( $html ) {
 } );
 
 /* ---------------------------------------------------------------
- * 3. 스타일
+ * 3. 답글 UX: "답글" → "답글달기", 답글 앞에 @부모댓글작성자
+ * ------------------------------------------------------------- */
+add_filter( 'comment_reply_link_args', function ( $args ) {
+	$args['reply_text'] = '답글달기';
+	return $args;
+} );
+
+// wpautop(우선순위 30)보다 먼저 붙여서 첫 문단 안에 들어가게 한다
+add_filter( 'comment_text', function ( $text, $comment = null ) {
+	if ( is_admin() || ! $comment instanceof WP_Comment || ! $comment->comment_parent ) {
+		return $text;
+	}
+	$parent = get_comment( $comment->comment_parent );
+	if ( ! $parent ) {
+		return $text;
+	}
+	return '<span class="sg-mention">@' . esc_html( $parent->comment_author ) . '</span> ' . $text;
+}, 10, 2 );
+
+/* ---------------------------------------------------------------
+ * 4. 글 좋아요(하트) + 댓글 수 바
+ *    - 페이지 캐시(LiteSpeed/Cloudflare)와 무관하도록 숫자·상태는 AJAX(POST)로 받아온다
+ *    - 중복 방지: 방문자 IP 해시를 글 메타에 저장(원본 IP는 저장하지 않음)
+ * ------------------------------------------------------------- */
+const SG_LIKE_MAX_TRACKED = 5000;
+
+function sg_like_visitor_key() {
+	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+	return substr( wp_hash( 'sg-like|' . $ip ), 0, 16 );
+}
+
+function sg_like_count( $post_id ) {
+	return (int) get_post_meta( $post_id, '_sg_likes', true );
+}
+
+function sg_like_ajax() {
+	$post_id = isset( $_POST['post'] ) ? absint( $_POST['post'] ) : 0;
+	$post    = $post_id ? get_post( $post_id ) : null;
+	if ( ! $post || 'publish' !== $post->post_status || post_password_required( $post ) ) {
+		wp_send_json_error( null, 400 );
+	}
+	$key   = sg_like_visitor_key();
+	$keys  = get_post_meta( $post_id, '_sg_like_keys', true );
+	$keys  = is_array( $keys ) ? $keys : array();
+	$liked = in_array( $key, $keys, true );
+
+	if ( isset( $_POST['mode'] ) && 'toggle' === $_POST['mode'] ) {
+		// 같은 방문자의 연타 방지 (2초)
+		$lock = 'sg_like_lock_' . $post_id . '_' . $key;
+		if ( get_transient( $lock ) ) {
+			wp_send_json_success( array( 'count' => sg_like_count( $post_id ), 'liked' => $liked ) );
+		}
+		set_transient( $lock, 1, 2 );
+
+		if ( $liked ) {
+			$keys = array_values( array_diff( $keys, array( $key ) ) );
+		} else {
+			$keys[] = $key;
+			if ( count( $keys ) > SG_LIKE_MAX_TRACKED ) {
+				$keys = array_slice( $keys, -SG_LIKE_MAX_TRACKED );
+			}
+		}
+		$liked = ! $liked;
+		update_post_meta( $post_id, '_sg_like_keys', $keys );
+		update_post_meta( $post_id, '_sg_likes', max( 0, sg_like_count( $post_id ) + ( $liked ? 1 : -1 ) ) );
+	}
+	wp_send_json_success( array( 'count' => sg_like_count( $post_id ), 'liked' => $liked ) );
+}
+add_action( 'wp_ajax_sg_like', 'sg_like_ajax' );
+add_action( 'wp_ajax_nopriv_sg_like', 'sg_like_ajax' );
+
+add_filter( 'render_block_core/comments', function ( $html, $parsed = null, $instance = null ) {
+	$post_id = ( $instance && ! empty( $instance->context['postId'] ) ) ? (int) $instance->context['postId'] : get_the_ID();
+	if ( ! $post_id ) {
+		return $html;
+	}
+	$likes    = sg_like_count( $post_id );
+	$comments = (int) get_comments_number( $post_id );
+	$heart    = '<svg class="sg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8.1 3.6 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.6 3.6 4.4 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
+	$bubble   = '<svg class="sg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4C6.8 4 3 7.3 3 11.3c0 2.2 1.1 4.1 2.9 5.5L5.3 20l3.5-1.8c1 .3 2.1.4 3.2.4 5.2 0 9-3.3 9-7.3S17.2 4 12 4z"/><circle cx="8.5" cy="11.3" r=".9"/><circle cx="12" cy="11.3" r=".9"/><circle cx="15.5" cy="11.3" r=".9"/></svg>';
+	$bar      = sprintf(
+		'<div class="sg-actions">'
+		. '<button type="button" class="sg-like" data-post="%1$d" aria-pressed="false">%2$s<span class="sg-like-num">%3$s</span><span class="sg-like-label">좋아요</span></button>'
+		. '<a class="sg-cmt" href="#%4$s">%5$s<span>댓글</span><span class="sg-cmt-num">%6$d</span></a>'
+		. '</div>',
+		$post_id,
+		$heart,
+		$likes ? number_format_i18n( $likes ) : '',
+		$comments ? 'comments' : 'respond',
+		$bubble,
+		$comments
+	);
+	// 댓글 블록 래퍼 <div class="wp-block-comments"> 바로 안쪽 맨 위에 넣는다
+	$out = preg_replace_callback(
+		'#^\s*<div[^>]*\bwp-block-comments\b[^>]*>#',
+		function ( $m ) use ( $bar ) {
+			return $m[0] . $bar;
+		},
+		$html,
+		1,
+		$n
+	);
+	return $n ? $out : $bar . $html;
+}, 10, 3 );
+
+/* ---------------------------------------------------------------
+ * 5. 스타일·스크립트
  * ------------------------------------------------------------- */
 add_action( 'wp_enqueue_scripts', function () {
 	if ( ! is_singular() || ! comments_open() && ! get_comments_number() ) {
@@ -117,9 +223,25 @@ add_action( 'wp_enqueue_scripts', function () {
 .wp-block-comment-date a{color:inherit;text-decoration:none}
 .wp-block-comment-template .wp-block-comment-content{margin:6px 0 8px!important;padding:0!important;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
 .wp-block-comment-content p{margin:0 0 .4em!important;padding:0!important}
-.wp-block-comment-reply-link a{display:inline-block;font-size:12px;color:var(--sg-sub);text-decoration:none;border:1px solid var(--sg-line);border-radius:4px;padding:2px 10px}
-.wp-block-comment-reply-link a:hover{color:var(--sg-accent);border-color:var(--sg-accent)}
-.bypostauthor>.wp-block-columns .wp-block-comment-author-name::after{content:"작성자";margin-left:6px;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;color:#fff;background:var(--sg-accent);vertical-align:1px}
+.wp-block-comment-reply-link{margin-top:10px!important}
+.wp-block-comment-reply-link a{font-size:13px;color:var(--sg-sub);text-decoration:none}
+.wp-block-comment-reply-link a:hover{color:var(--sg-accent);text-decoration:underline}
+.sg-mention{display:inline-block;margin-right:2px;padding:0 4px;border-radius:3px;background:#f0eef5;color:var(--sg-accent);font-weight:600}
+.bypostauthor>.wp-block-columns .wp-block-comment-author-name::after{content:"작성자";margin-left:6px;padding:0 7px;border:1px solid var(--sg-accent);border-radius:10px;font-size:11px;font-weight:500;color:var(--sg-accent);vertical-align:1px}
+/* 좋아요·댓글 바 */
+.sg-actions{display:flex;justify-content:space-between;align-items:center;margin:0 0 40px}
+.sg-like,.sg-cmt{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 20px;border:1px solid #d9d9df;border-radius:22px;background:#fff;color:#333;font:inherit;font-size:15px;line-height:1;text-decoration:none!important;cursor:pointer;transition:border-color .15s,color .15s}
+.sg-like:hover,.sg-cmt:hover{border-color:var(--sg-accent)}
+.sg-ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+.sg-cmt .sg-ico circle{fill:currentColor;stroke:none}
+.sg-like-num:empty{display:none}
+.sg-like-label{display:none}
+.sg-like-num:empty+.sg-like-label{display:inline}
+.sg-like[aria-pressed="true"]{color:#e5484d;border-color:#f3b4b6}
+.sg-like[aria-pressed="true"] .sg-ico{fill:#e5484d;stroke:#e5484d}
+.sg-like.is-pop .sg-ico{animation:sg-pop .35s ease}
+@keyframes sg-pop{40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.sg-cmt-num{color:var(--sg-accent);font-weight:600}
 /* 폼 */
 .wp-block-post-comments-form{margin-top:28px}
 .wp-block-post-comments-form .comment-reply-title{font-size:16px!important;font-weight:700;margin:0 0 10px!important;display:flex;align-items:center;gap:8px}
@@ -147,12 +269,39 @@ add_action( 'wp_enqueue_scripts', function () {
 #commentform .sg-cf-submit:not(:disabled):hover{opacity:.88}
 @media (max-width:600px){#commentform .comment-form-author,#commentform .comment-form-email{width:100%!important;padding-right:16px}}
 CSS;
-	wp_register_style( 'sg-comments', false, array(), '1.0.0' );
+	wp_register_style( 'sg-comments', false, array(), '1.1.0' );
 	wp_enqueue_style( 'sg-comments' );
 	wp_add_inline_style( 'sg-comments', $css );
 
 	$js = <<<JS
 document.addEventListener('DOMContentLoaded',function(){
+  /* 상대 시간: 캐시된 페이지에서도 정확하도록 브라우저에서 계산 */
+  document.querySelectorAll('.wp-block-comment-date time[datetime]').forEach(function(el){
+    var t=new Date(el.getAttribute('datetime')),d=(Date.now()-t)/1000,a=el.querySelector('a')||el,s;
+    if(isNaN(d))return;
+    if(d<60)s='방금 전';else if(d<3600)s=Math.floor(d/60)+'분 전';else if(d<86400)s=Math.floor(d/3600)+'시간 전';
+    else if(d<86400*7)s=Math.floor(d/86400)+'일 전';
+    else s=t.getFullYear()+'.'+String(t.getMonth()+1).padStart(2,'0')+'.'+String(t.getDate()).padStart(2,'0');
+    el.title=t.toLocaleString('ko-KR');a.textContent=s;
+  });
+  /* 좋아요 */
+  var ajax=window.sgComments&&sgComments.ajax;
+  document.querySelectorAll('.sg-like[data-post]').forEach(function(btn){
+    var num=btn.querySelector('.sg-like-num'),busy=false;
+    function render(r){btn.setAttribute('aria-pressed',r.liked?'true':'false');btn.setAttribute('aria-label',r.liked?'좋아요 취소':'좋아요');num.textContent=r.count>0?r.count.toLocaleString('ko-KR'):'';}
+    function call(mode){var b=new URLSearchParams({action:'sg_like',mode:mode,post:btn.dataset.post});
+      return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){if(j&&j.success)render(j.data);});}
+    if(!ajax)return;
+    call('get').catch(function(){});
+    btn.addEventListener('click',function(){
+      if(busy)return;busy=true;
+      var on=btn.getAttribute('aria-pressed')!=='true',n=parseInt((num.textContent||'0').replace(/\D/g,''),10)||0;
+      render({liked:on,count:Math.max(0,n+(on?1:-1))});
+      if(on){btn.classList.remove('is-pop');void btn.offsetWidth;btn.classList.add('is-pop');}
+      call('toggle').catch(function(){}).then(function(){busy=false;});
+    });
+  });
+  /* 댓글 폼 */
   var t=document.getElementById('comment'),f=document.getElementById('commentform');
   if(!t||!f)return;
   var c=f.querySelector('.sg-cf-count b'),w=f.querySelector('.sg-cf-count'),b=f.querySelector('.sg-cf-submit'),max=+t.getAttribute('maxlength');
@@ -161,7 +310,8 @@ document.addEventListener('DOMContentLoaded',function(){
   t.addEventListener('input',u);u();
 });
 JS;
-	wp_register_script( 'sg-comments', false, array(), '1.0.0', true );
+	wp_register_script( 'sg-comments', false, array(), '1.1.0', true );
 	wp_enqueue_script( 'sg-comments' );
+	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
 	wp_add_inline_script( 'sg-comments', $js );
 } );
