@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.3.1
+ * Version: 1.3.2
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
