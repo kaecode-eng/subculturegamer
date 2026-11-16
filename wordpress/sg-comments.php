@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.1.0
+ * Version: 1.2.0
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -314,4 +314,83 @@ JS;
 	wp_enqueue_script( 'sg-comments' );
 	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
 	wp_add_inline_script( 'sg-comments', $js );
+} );
+/* ---------------------------------------------------------------
+ * 6. 관리자 통계: 글 목록 ♥ 열(정렬 가능) + 대시보드 상위 글 위젯
+ * ------------------------------------------------------------- */
+add_filter( 'manage_post_posts_columns', function ( $cols ) {
+	$out = array();
+	foreach ( $cols as $k => $v ) {
+		$out[ $k ] = $v;
+		if ( 'comments' === $k ) {
+			$out['sg_likes'] = '<span title="좋아요">♥ 좋아요</span>';
+		}
+	}
+	if ( ! isset( $out['sg_likes'] ) ) {
+		$out['sg_likes'] = '<span title="좋아요">♥ 좋아요</span>';
+	}
+	return $out;
+} );
+
+add_action( 'manage_post_posts_custom_column', function ( $col, $post_id ) {
+	if ( 'sg_likes' === $col ) {
+		$n = sg_like_count( $post_id );
+		echo $n ? '<strong style="color:#e5484d">♥ ' . esc_html( number_format_i18n( $n ) ) . '</strong>' : '<span style="color:#bbb">0</span>';
+	}
+}, 10, 2 );
+
+add_filter( 'manage_edit-post_sortable_columns', function ( $cols ) {
+	$cols['sg_likes'] = array( 'sg_likes', true ); // 처음 클릭 시 많은 순
+	return $cols;
+} );
+
+// 좋아요를 한 번도 받지 않은 글(메타 없음)도 정렬에서 빠지지 않도록 LEFT JOIN 형태로 정렬
+add_action( 'pre_get_posts', function ( $q ) {
+	if ( ! is_admin() || ! $q->is_main_query() || 'sg_likes' !== $q->get( 'orderby' ) ) {
+		return;
+	}
+	$q->set( 'meta_query', array(
+		'relation' => 'OR',
+		'sg_has'   => array( 'key' => '_sg_likes', 'type' => 'NUMERIC' ),
+		'sg_none'  => array( 'key' => '_sg_likes', 'compare' => 'NOT EXISTS' ),
+	) );
+	$q->set( 'orderby', array( 'sg_has' => $q->get( 'order' ) ?: 'DESC', 'date' => 'DESC' ) );
+} );
+
+add_action( 'admin_head-edit.php', function () {
+	echo '<style>.column-sg_likes{width:7em;text-align:center!important}</style>';
+} );
+
+add_action( 'wp_dashboard_setup', function () {
+	wp_add_dashboard_widget( 'sg_likes_top', '♥ 좋아요 많은 글 TOP 10', function () {
+		$posts = get_posts( array(
+			'post_type'      => 'post',
+			'posts_per_page' => 10,
+			'meta_key'       => '_sg_likes',
+			'orderby'        => 'meta_value_num',
+			'order'          => 'DESC',
+			'meta_query'     => array( array( 'key' => '_sg_likes', 'value' => 0, 'compare' => '>', 'type' => 'NUMERIC' ) ),
+		) );
+		if ( ! $posts ) {
+			echo '<p>아직 좋아요를 받은 글이 없습니다.</p>';
+			return;
+		}
+		$total = 0;
+		echo '<ol style="margin:0;padding-left:1.5em">';
+		foreach ( $posts as $p ) {
+			$n      = sg_like_count( $p->ID );
+			$total += $n;
+			printf(
+				'<li style="display:flex;gap:8px;margin-bottom:6px"><a href="%s" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">%s</a><strong style="color:#e5484d">♥ %s</strong></li>',
+				esc_url( get_permalink( $p ) ),
+				esc_html( get_the_title( $p ) ),
+				esc_html( number_format_i18n( $n ) )
+			);
+		}
+		echo '</ol>';
+		printf(
+			'<p style="margin:10px 0 0;color:#787c82">전체 글 목록에서 보기: <a href="%s">좋아요 많은 순 정렬</a></p>',
+			esc_url( admin_url( 'edit.php?orderby=sg_likes&order=desc' ) )
+		);
+	} );
 } );
