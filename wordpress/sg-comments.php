@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.3.2
+ * Version: 1.4.0
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -337,7 +337,7 @@ sync();
 JS;
 	wp_register_script( 'sg-comments', false, array(), '1.3.1', true );
 	wp_enqueue_script( 'sg-comments' );
-	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
+	wp_add_inline_script( 'sg-comments', 'window.sgComments=' . wp_json_encode( array( 'ajax' => admin_url( 'admin-ajax.php' ), 'editUrl' => admin_url( 'comment.php?action=editcomment&c=' ) ) ) . ';', 'before' );
 	wp_add_inline_script( 'sg-comments', $js );
 } );
 /* ---------------------------------------------------------------
@@ -423,3 +423,193 @@ add_action( 'wp_dashboard_setup', function () {
 		);
 	} );
 } );
+
+/* ---------------------------------------------------------------
+ * 7. 댓글 ⋮ 메뉴: 링크 복사 · 신고(모든 방문자) / 수정 · 삭제(관리자)
+ *    - 페이지 캐시에 관리자 메뉴가 섞이지 않도록 HTML 에는 버튼만 넣고,
+ *      관리자 메뉴와 nonce 는 로그인한 사용자에게만 AJAX 로 받아 JS 가 추가한다
+ *    - 신고는 방문자 IP 해시로 중복을 막고, SG_REPORT_HIDE_AT 건이 되면 승인 대기로 돌린다
+ * ------------------------------------------------------------- */
+const SG_REPORT_HIDE_AT = 3;
+
+add_filter( 'render_block_core/comment-author-name', function ( $html, $parsed = null, $instance = null ) {
+	$cid = ( $instance && ! empty( $instance->context['commentId'] ) ) ? (int) $instance->context['commentId'] : 0;
+	if ( ! $cid ) {
+		return $html;
+	}
+	return $html . sprintf(
+		'<div class="sg-cmenu" data-cid="%1$d"><button type="button" class="sg-cmenu-btn" aria-haspopup="true" aria-expanded="false" aria-label="댓글 메뉴">'
+		. '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>'
+		. '<ul class="sg-cmenu-list" role="menu" hidden>'
+		. '<li role="none"><button type="button" role="menuitem" data-act="copy">링크 복사</button></li>'
+		. '<li role="none" class="sg-cmenu-report"><button type="button" role="menuitem" data-act="report">신고</button></li>'
+		. '</ul></div>',
+		$cid
+	);
+}, 10, 3 );
+
+// 로그인 사용자: 관리 가능 여부와 nonce 를 돌려준다(캐시되지 않는 AJAX)
+add_action( 'wp_ajax_sg_cmt_caps', function () {
+	wp_send_json_success( array(
+		'moderate' => current_user_can( 'moderate_comments' ),
+		'nonce'    => current_user_can( 'moderate_comments' ) ? wp_create_nonce( 'sg_cmt_mod' ) : '',
+	) );
+} );
+
+// 관리자: 휴지통으로 이동
+add_action( 'wp_ajax_sg_cmt_trash', function () {
+	$cid = isset( $_POST['cid'] ) ? absint( $_POST['cid'] ) : 0;
+	if ( ! $cid || ! check_ajax_referer( 'sg_cmt_mod', 'nonce', false ) || ! current_user_can( 'edit_comment', $cid ) ) {
+		wp_send_json_error( null, 403 );
+	}
+	wp_send_json_success( array( 'trashed' => (bool) wp_trash_comment( $cid ) ) );
+} );
+
+// 모든 방문자: 신고
+function sg_cmt_report_ajax() {
+	$cid     = isset( $_POST['cid'] ) ? absint( $_POST['cid'] ) : 0;
+	$comment = $cid ? get_comment( $cid ) : null;
+	if ( ! $comment || '1' !== (string) $comment->comment_approved ) {
+		wp_send_json_error( null, 400 );
+	}
+	$key = sg_like_visitor_key();
+
+	// 같은 방문자는 1시간에 10건까지만
+	$rate = 'sg_report_rate_' . $key;
+	$used = (int) get_transient( $rate );
+	if ( $used >= 10 ) {
+		wp_send_json_error( array( 'message' => '잠시 후 다시 시도해 주세요.' ), 429 );
+	}
+	set_transient( $rate, $used + 1, HOUR_IN_SECONDS );
+
+	$keys = get_comment_meta( $cid, '_sg_report_keys', true );
+	$keys = is_array( $keys ) ? $keys : array();
+	if ( in_array( $key, $keys, true ) ) {
+		wp_send_json_success( array( 'already' => true ) );
+	}
+	$keys[] = $key;
+	$count  = count( $keys );
+	update_comment_meta( $cid, '_sg_report_keys', $keys );
+	update_comment_meta( $cid, '_sg_reports', $count );
+
+	if ( 1 === $count ) {
+		wp_mail(
+			get_option( 'admin_email' ),
+			'[' . wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) . '] 댓글 신고 접수',
+			sprintf(
+				"댓글이 신고됐습니다.\n\n글: %s\n작성자: %s\n내용: %s\n\n관리: %s",
+				get_the_title( $comment->comment_post_ID ),
+				$comment->comment_author,
+				wp_strip_all_tags( $comment->comment_content ),
+				admin_url( 'comment.php?action=editcomment&c=' . $cid )
+			)
+		);
+	}
+	$hidden = false;
+	if ( $count >= SG_REPORT_HIDE_AT ) {
+		$hidden = (bool) wp_set_comment_status( $cid, 'hold' );
+	}
+	wp_send_json_success( array( 'already' => false, 'hidden' => $hidden ) );
+}
+add_action( 'wp_ajax_sg_cmt_report', 'sg_cmt_report_ajax' );
+add_action( 'wp_ajax_nopriv_sg_cmt_report', 'sg_cmt_report_ajax' );
+
+// 관리자 댓글 목록에 "신고" 열
+add_filter( 'manage_edit-comments_columns', function ( $cols ) {
+	$cols['sg_reports'] = '신고';
+	return $cols;
+} );
+add_action( 'manage_comments_custom_column', function ( $col, $cid ) {
+	if ( 'sg_reports' === $col ) {
+		$n = (int) get_comment_meta( $cid, '_sg_reports', true );
+		echo $n ? '<strong style="color:#d63638">🚩 ' . esc_html( $n ) . '</strong>' : '<span style="color:#bbb">-</span>';
+	}
+}, 10, 2 );
+add_action( 'admin_head-edit-comments.php', function () {
+	echo '<style>.column-sg_reports{width:5em;text-align:center!important}</style>';
+} );
+
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! is_singular() || ! get_comments_number() ) {
+		return;
+	}
+	$css = <<<CSS
+.wp-block-comment-template li{position:relative}
+.wp-block-comment-template li .wp-block-comment-author-name{padding-right:36px}
+.sg-cmenu{position:absolute;top:14px;right:0;z-index:5}
+.wp-block-comment-template ol.children .sg-cmenu{top:10px}
+.sg-cmenu-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:transparent;color:#a0a0a8;cursor:pointer}
+.sg-cmenu-btn:hover,.sg-cmenu-btn[aria-expanded="true"]{background:#f2f2f5;color:#555}
+.sg-cmenu-btn svg{width:20px;height:20px;fill:currentColor}
+.sg-cmenu-list{position:absolute;top:34px;right:0;min-width:120px;margin:0;padding:6px 0;list-style:none;background:#fff;border:1px solid #e3e3e8;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.sg-cmenu-list[hidden]{display:none}
+.sg-cmenu-list li{margin:0!important;padding:0!important;border:0!important}
+.sg-cmenu-list button{display:block;width:100%;padding:8px 16px;border:0;background:none;font:inherit;font-size:14px;color:#333;text-align:left;cursor:pointer}
+.sg-cmenu-list button:hover,.sg-cmenu-list button:focus-visible{background:#f5f4f8;outline:0}
+.sg-cmenu-list [data-act="trash"],.sg-cmenu-list [data-act="report"]{color:#d63638}
+.sg-cmenu.is-mod .sg-cmenu-report{display:none}
+.sg-toast{position:fixed;left:50%;bottom:32px;z-index:9999;transform:translate(-50%,12px);padding:10px 18px;border-radius:20px;background:rgba(30,30,35,.92);color:#fff;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.sg-toast.is-on{opacity:1;transform:translate(-50%,0)}
+.wp-block-comment-template li.is-removing{opacity:.3;transition:opacity .3s}
+CSS;
+	wp_register_style( 'sg-comments-menu', false, array( 'sg-comments' ), '1.4.0' );
+	wp_enqueue_style( 'sg-comments-menu' );
+	wp_add_inline_style( 'sg-comments-menu', $css );
+
+	$js = <<<JS
+(function(){
+function init(){
+  var ajax=window.sgComments&&sgComments.ajax,menus=document.querySelectorAll('.sg-cmenu');
+  if(!ajax||!menus.length)return;
+  var toastEl,toastT;
+  function toast(m){if(!toastEl){toastEl=document.createElement('div');toastEl.className='sg-toast';toastEl.setAttribute('role','status');document.body.appendChild(toastEl);}
+    toastEl.textContent=m;toastEl.classList.add('is-on');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('is-on');},2200);}
+  function post(p){var b=new URLSearchParams(p);return fetch(ajax,{method:'POST',body:b,credentials:'same-origin'}).then(function(r){return r.json()});}
+  function close(m){var b=m.querySelector('.sg-cmenu-btn'),l=m.querySelector('.sg-cmenu-list');b.setAttribute('aria-expanded','false');l.hidden=true;}
+  function closeAll(except){menus.forEach(function(m){if(m!==except)close(m);});}
+  var nonce='';
+  /* 관리자: 로그인 상태일 때만 권한을 물어 수정·삭제를 붙인다 */
+  if(document.body.classList.contains('logged-in')){
+    post({action:'sg_cmt_caps'}).then(function(j){
+      if(!j||!j.success||!j.data.moderate)return;nonce=j.data.nonce;
+      menus.forEach(function(m){m.classList.add('is-mod');var l=m.querySelector('.sg-cmenu-list');
+        l.insertAdjacentHTML('beforeend','<li role="none"><button type="button" role="menuitem" data-act="edit">수정</button></li><li role="none"><button type="button" role="menuitem" data-act="trash">삭제</button></li>');});
+    }).catch(function(){});
+  }
+  menus.forEach(function(m){
+    var btn=m.querySelector('.sg-cmenu-btn'),list=m.querySelector('.sg-cmenu-list'),cid=m.dataset.cid;
+    btn.addEventListener('click',function(e){e.stopPropagation();var open=list.hidden;closeAll(m);list.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');
+      if(open){var f=list.querySelector('button');if(f)f.focus();}});
+    list.addEventListener('click',function(e){
+      var it=e.target.closest('[data-act]');if(!it)return;close(m);btn.focus();
+      var act=it.dataset.act,li=m.closest('li.comment')||document.getElementById('comment-'+cid);
+      if(act==='copy'){
+        var url=location.origin+location.pathname+'#comment-'+cid;
+        (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){toast('댓글 링크를 복사했습니다');},function(){window.prompt('아래 링크를 복사하세요',url);});
+      }else if(act==='report'){
+        if(!window.confirm('이 댓글을 신고할까요?\\n신고 내용은 블로그 운영자에게 전달됩니다.'))return;
+        post({action:'sg_cmt_report',cid:cid}).then(function(j){
+          if(j&&j.success){toast(j.data.already?'이미 신고한 댓글입니다':'신고가 접수됐습니다');if(j.data.hidden&&li)li.classList.add('is-removing');}
+          else toast((j&&j.data&&j.data.message)||'신고를 처리하지 못했습니다');
+        }).catch(function(){toast('신고를 처리하지 못했습니다');});
+      }else if(act==='edit'){
+        location.href=sgComments.editUrl+cid;
+      }else if(act==='trash'){
+        if(!window.confirm('이 댓글을 삭제할까요?\\n휴지통으로 이동하며, 관리자 화면에서 되돌릴 수 있습니다.'))return;
+        post({action:'sg_cmt_trash',cid:cid,nonce:nonce}).then(function(j){
+          if(j&&j.success&&j.data.trashed){toast('댓글을 삭제했습니다');if(li){li.classList.add('is-removing');setTimeout(function(){li.remove();},300);}}
+          else toast('삭제하지 못했습니다');
+        }).catch(function(){toast('삭제하지 못했습니다');});
+      }
+    });
+  });
+  document.addEventListener('click',function(e){if(!e.target.closest('.sg-cmenu'))closeAll();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var o=document.querySelector('.sg-cmenu-btn[aria-expanded="true"]');closeAll();if(o)o.focus();}});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+JS;
+	wp_register_script( 'sg-comments-menu', false, array( 'sg-comments' ), '1.4.0', true );
+	wp_enqueue_script( 'sg-comments-menu' );
+	wp_add_inline_script( 'sg-comments-menu', $js );
+}, 20 );
