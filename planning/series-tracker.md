@@ -104,7 +104,7 @@
 - 옛 URL 6개(`/game-directing-*` 5개, `/game-presenment-5-elements/`)와 폰트 글 URL은 Redirection으로 통합본·445에 301 연결(2026-11-17 확인, 모두 200 도착)
 - 입문 글 「게임 스토리 연출이란?」(25)과 5요소 주제가 겹친다. 25에 실무 문단을 옮기는 대신, 25의 5요소 소개 앞에 68 링크 문장을 넣어 역할을 나눴다(2026-11-17 사이트 반영 확인). 수정본 `posts/drafts/2026-11-16-what-is-game-story-directing-update.html`은 쓰지 않는다
 - [x] 저장소 정리(2026-11-17): 옛 기록 `game-presenment-5-elements.md` 삭제, 원본 초안 `posts/drafts/game-presentation-*` 7편은 통합본의 원고로 보관(발행 대상 아님)
-- [ ] 남은 결정: 사이트의 옛 연출 5편·폰트 글(140, 170, 185, 201, 215, 223) 휴지통 이동
+- [x] 사이트의 옛 연출 5편·폰트 글(140, 170, 185, 201, 215, 223) 휴지통 이동(2026-11-17, 사용자가 관리자 화면에서 처리). 옛 URL 7개는 이동 뒤에도 리다이렉트 1회로 통합본·445에 200 도착 확인
 - 연결: [[wiki/series-threads/game-direction-and-subculture-character-hub.md]]
 
 ---
