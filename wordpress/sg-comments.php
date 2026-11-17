@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.4.1
+ * Version: 1.4.2
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -49,10 +49,20 @@ add_filter( 'comment_form_defaults', function ( $d ) {
 	);
 
 	// 비로그인: 이름·이메일 한 줄, 웹사이트 칸 제거
-	$d['fields']['author'] = '<p class="comment-form-author"><label for="author" class="screen-reader-text">닉네임</label>'
-		. '<input id="author" name="author" type="text" size="30" maxlength="245" autocomplete="name" placeholder="닉네임" required /></p>';
-	$d['fields']['email']  = '<p class="comment-form-email"><label for="email" class="screen-reader-text">이메일</label>'
-		. '<input id="email" name="email" type="email" size="30" maxlength="100" autocomplete="email" placeholder="이메일 (공개되지 않음)" required /></p>';
+	// 설정 → 토론 "이름과 이메일 필수"를 따른다. 해제돼 있으면 둘 다 선택이고, 닉네임을 비우면 WordPress 가 "익명"으로 표시한다.
+	$req = (bool) get_option( 'require_name_email' );
+	$d['fields']['author'] = sprintf(
+		'<p class="comment-form-author"><label for="author" class="screen-reader-text">닉네임</label>'
+		. '<input id="author" name="author" type="text" size="30" maxlength="245" autocomplete="nickname" placeholder="%s"%s /></p>',
+		$req ? '닉네임' : '닉네임 (선택 · 비우면 익명)',
+		$req ? ' required' : ''
+	);
+	$d['fields']['email']  = sprintf(
+		'<p class="comment-form-email"><label for="email" class="screen-reader-text">이메일</label>'
+		. '<input id="email" name="email" type="email" size="30" maxlength="100" autocomplete="email" placeholder="%s"%s /></p>',
+		$req ? '이메일 (공개되지 않음)' : '이메일 (선택 · 공개되지 않음)',
+		$req ? ' required' : ''
+	);
 	unset( $d['fields']['url'] );
 	if ( isset( $d['fields']['cookies'] ) ) {
 		$d['fields']['cookies'] = '<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" />'
@@ -107,7 +117,8 @@ add_filter( 'comment_text', function ( $text, $comment = null ) {
 	if ( ! $parent ) {
 		return $text;
 	}
-	return '<span class="sg-mention">@' . esc_html( $parent->comment_author ) . '</span> ' . $text;
+	// 닉네임 없이 쓴 댓글은 comment_author 가 비어 있으므로 표시 이름("익명")을 쓴다
+	return '<span class="sg-mention">@' . esc_html( get_comment_author( $parent ) ) . '</span> ' . $text;
 }, 10, 2 );
 
 /* ---------------------------------------------------------------
