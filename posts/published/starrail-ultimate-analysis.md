@@ -6,8 +6,8 @@ categories: []
 tags: ["게임 디자인", "커리어"]
 related_posts: []
 wiki_refs: []
-series: ""
-series_order: null
+series: "붕괴: 스타레일 분석"
+series_order: 5
 ---
 
 ## 들어가는 글

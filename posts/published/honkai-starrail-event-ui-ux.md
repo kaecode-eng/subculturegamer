@@ -6,8 +6,8 @@ categories: []
 tags: ["게임 분석"]
 related_posts: []
 wiki_refs: []
-series: ""
-series_order: null
+series: "붕괴: 스타레일 분석"
+series_order: 4
 ---
 
 [(공식 홈페이지 버전 업데이트 안내 공지 링크)](https://hsr.hoyoverse.com/ko-kr/news/113648)

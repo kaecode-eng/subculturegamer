@@ -11,6 +11,7 @@ related_posts:
   - honkai-starrail-event-ui-ux.md
   - penacony-symbol-metaphor.md
   - 2024-04-07-starsystem-archeron.md
+  - 2026-11-17-honkai-starrail-series.md
 related_wiki:
   - wiki/concepts/onboarding-design.md
   - wiki/concepts/lobby-design.md
@@ -33,7 +34,7 @@ last_updated: 2026-11-17
 
 ## 허브
 
-- 8편을 묶는 허브 「붕괴: 스타레일 분석 시리즈」 초안을 작성했다(2026-11-17, 미발행). 1부 플레이 경험 설계(온보딩 1~3, 미리환야담), 2부 연출과 아트(필살기, 반디), 3부 캐릭터와 세계관(아케론, 페나코니). 발행 준비: `planning/2026-11-17-honkai-starrail-hub.md`
+- 8편을 묶는 허브 「붕괴: 스타레일 분석 시리즈」(`2026-11-17-honkai-starrail-series`, `/honkai-starrail-series/`)를 2026-11-17 발행했다. 8편 끝에 허브 링크 문단이 있다. 1부 플레이 경험 설계(온보딩 1~3, 미리환야담), 2부 연출과 아트(필살기, 반디), 3부 캐릭터와 세계관(아케론, 페나코니). 발행 준비: `planning/2026-11-17-honkai-starrail-hub.md`
 
 ## 분석 미개척 각도
 
