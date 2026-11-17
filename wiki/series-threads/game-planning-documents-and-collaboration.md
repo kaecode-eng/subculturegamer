@@ -20,11 +20,12 @@ related_posts:
   - 2025-12-25-asana-for-worker-cowork-guide.md
   - 2026-01-08-asana-for-manager-cowork-guide.md
   - 2026-11-12-asana-cowork-series.md
+  - 2026-01-01-game-dev-tf-proposal-guide.md
 related_wiki:
   - wiki/concepts/mda-framework.md
   - wiki/concepts/vibe-coding-for-game-design.md
   - wiki/series-threads/honkai3rd-return-system-reverse-design-series.md
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 아이디어를 문서로 정리하고, 협업 파트너를 설득해 실제 개발까지 옮기는 기획자의 독서 경로다.

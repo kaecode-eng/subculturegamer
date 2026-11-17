@@ -1,6 +1,6 @@
 # 연재 시리즈 트래커
 
-> 2026-11-15 기준 업데이트 (10/8 이후 블로그 변경 반영, 협업툴 Asana 시리즈 완결)
+> 2026-11-17 기준 업데이트 (게임 연출 통합본 등 비공개였던 4편 공개·등록)
 
 ---
 
@@ -98,11 +98,12 @@
 
 ---
 
-### 게임 연출 시리즈 → 1편 통합 (비공개 검토 대기)
-**상태**: 기존 5편을 통합본 1편(블로그 ID 68)으로 합침. 새 섬네일 필요, 공개는 사용자 승인 후
-- 기존 URL은 Redirection으로 통합본에 리다이렉트 설정 완료
-- 저장소 기록: `game-presenment-5-elements.md`(공개 URL 없음), `posts/drafts/game-presentation-*` 7편
-- 통합본 공개 시 `/register`로 등록하고 위 파일들의 처리(보관/삭제)를 결정
+### 게임 연출 시리즈 → 1편 통합 ✓ (2026-11-17 공개·등록)
+**상태**: 기존 5편을 통합본 1편 「게임 시나리오 연출 5요소」(`2023-03-24-game-scenario-directing-elements.md`, ID 68)로 합쳐 공개. 작성일은 원래 날짜(2023-03-24) 유지
+- 세부 글 2편도 같은 날 공개·등록: 이모티콘 연출 가이드(`2023-04-03-character-emoticon-reactions.md`, ID 352), 다이얼로그 UI 다중 해상도 대응(`2023-04-05-dialogue-ui-multi-resolution.md`, ID 445)
+- 옛 URL 6개(`/game-directing-*` 5개, `/game-presenment-5-elements/`)와 폰트 글 URL은 Redirection으로 통합본·445에 301 연결(2026-11-17 확인, 모두 200 도착)
+- 입문 글 「게임 스토리 연출이란?」(25)과 5요소 주제가 겹친다. 25에 실무 문단을 옮기는 대신, 25의 5요소 소개 앞에 68 링크 문장을 넣어 역할을 나눴다(2026-11-17 사이트 반영 확인). 수정본 `posts/drafts/2026-11-16-what-is-game-story-directing-update.html`은 쓰지 않는다
+- [ ] 남은 결정: `game-presenment-5-elements.md`(공개 URL 없는 옛 기록)와 `posts/drafts/game-presentation-*` 7편의 보관/삭제, 옛 연출 5편·폰트 글(140, 170, 185, 201, 215, 223) 휴지통 이동
 - 연결: [[wiki/series-threads/game-direction-and-subculture-character-hub.md]]
 
 ---

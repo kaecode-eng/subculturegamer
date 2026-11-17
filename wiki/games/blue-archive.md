@@ -8,10 +8,11 @@ related_posts:
   - very-short-story-gourmet-blue-archive.md
   - ndc-2026-insights-from-3-session.md
   - 2026-08-09-konosuba-character-driven-storytelling.md
+  - 2023-03-24-game-scenario-directing-elements.md
 related_wiki:
   - wiki/concepts/mda-framework.md
   - wiki/concepts/narrative-design.md
-last_updated: 2026-08-16
+last_updated: 2026-11-17
 ---
 
 ## 게임 개요
