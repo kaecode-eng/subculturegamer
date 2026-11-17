@@ -2,15 +2,17 @@
 title: "면접관이 권장하는 게임잡 이력서 작성 방법"
 url: https://subculturegamer.com/gamejob-resume-tips/
 published: 2025-07-20
-categories: []
-tags: ["커리어"]
-related_posts: []
-wiki_refs: []
-series: ""
-series_order: null
+categories: ["커리어"]
+tags: ["취업·이직"]
+related_posts:
+  - narrative-designer-portfolio-guide
+  - narrative-designer-interview-guide
+wiki_refs:
+  - wiki/series-threads/narrative-designer-growth-hub
+series: "내러티브 기획자 취업 가이드"
+series_order: 1
 ---
-
-![면접관이 권장하는 게임잡 이력서 작성 방법](https://subculturegamer.com/wp-content/uploads/2025/07/무제-1024x1024-1.avif)
+![「면접관이 권장하는 게임잡 이력서 작성 방법」 표지와 게임잡 로고](https://subculturegamer.com/wp-content/uploads/2025/07/무제-1024x1024-1.avif)
 
 면접관이 권장하는 게임잡 이력서 작성 방법
 
@@ -220,6 +222,8 @@ series_order: null
 
 서류 합격 여부는 ‘포트폴리오’로 갈린다.
 
+포트폴리오를 어떻게 만들어야 서류를 통과하는지는 [서류전형 통과하는 게임잡 포트폴리오 작성 방법](https://subculturegamer.com/narrative-designer-portfolio-guide/)에서 자세히 다뤘다.
+
 그렇다고 자기소개서는 완전 대충 써도 될 정도로 무시해도 되는 요소는 아니다.
 
 실제로 필자도 자기소개서를 보고 많은 사람들을 서류에서 떨어트렸기 때문에, 자기소개서의 존재를 무시해서는 안 된다.
@@ -336,7 +340,3 @@ series_order: null
 본인이 80점짜리라고 해도, 주위가 모두 90점이라면 불합격한다.
 
 하나의 회사에 합격/불합격 했다고해서 일희일비하지 말고 언제나 최선을 다하며 준비한다면, 언젠가 자신이 정말 가고 싶었던 회사나 프로젝트에 갈 수 있을 것이다.
-
-### 연관글:
-
-[## [몬길:Star Dive] 리뷰 – 과감한 서브컬처풍 아트와 가벼운 내러티브 감성](https://subculturegamer.com/mongil-stardive-review/)[## Zero에서 시작하는 게임 디자인: '나의 취향'이 오리지널리티가 되기까지](https://subculturegamer.com/game-design-from-zero-originality/)[## [퀘스트 디자인 6편] – 퀘스트 기획 실무 가이드 III](https://subculturegamer.com/game-quest-design-episode-planning-guide-3/)[## [퀘스트 디자인 5편] – 퀘스트 기획 실무 가이드 II](https://subculturegamer.com/game-quest-design-episode-planning-guide-2/)[## [퀘스트 디자인 4편] – 퀘스트 기획 실무 가이드 I](https://subculturegamer.com/game-quest-design-episode-planning-guide/)[## [퀘스트 디자인 2편] 퀘스트의 4대 기둥: 메인, 서브, 일일, 이벤트](https://subculturegamer.com/types-of-quest-design/)
