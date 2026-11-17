@@ -4,9 +4,58 @@ subculturegamer.com(Neve FSE 테마)에 직접 올리는 코드 모음.
 
 ## sg-comments.php — 한국형 댓글 UI + 글 좋아요
 
+워드프레스 기본 댓글 UI를 네이버 블로그·티스토리·브런치에 익숙한 형태로 바꾸고, 글 좋아요(하트)를 더한 mu-plugin.
+
+### 현재 상태 (2026-11-17)
+
+| 항목 | 상태 |
+|---|---|
+| 사이트 적용 버전 | **1.5.0** (`wp-content/mu-plugins/sg-comments.php`) |
+| 설정 → 토론 | 이름·이메일 필수 **해제**, 수동 승인 **해제**, 이전 승인 필요 **해제**, 새 댓글 메일 알림 **켜짐** |
+| LiteSpeed Cache → CDN → Cloudflare | Cloudflare API **켜짐**(키·영역 저장됨). 댓글 변화 시 캐시 삭제가 이 값을 쓴다 |
+| GA4 | `post_like`/`post_unlike` 수신 확인, 맞춤 측정기준 `title`(`post_title`) 등록 |
+| 실사이트 확인 | 폼·하트·⋮ 메뉴(비로그인) 화면, 익명 댓글 바로 공개, 등록 직후 일반 주소 반영(Cloudflare `MISS`), 댓글 목록 아래 "Cloudflare 캐시 삭제: 성공" |
+
+배포는 **cPanel에서 파일 덮어쓰기**로 한다. 이 저장소의 클라우드 세션은 WordPress REST 인증이 `401`이라 직접 올릴 수 없다(사이트에 Code Snippets는 설치돼 있어 인증만 해결되면 스니펫 방식으로 옮길 수 있다. 옮길 때는 mu-plugins 파일을 먼저 지워야 함수 중복 오류가 나지 않는다).
+
+### 기능 요약
+
+| 영역 | 내용 |
+|---|---|
+| 댓글 폼 | 입력창·글자 수(`0 / 1000`)·`등록` 버튼을 한 박스로. 로그인 시 아바타+닉네임, 비회원은 닉네임·이메일 한 줄(선택 입력, 비우면 익명). 빈 본문이면 버튼 비활성, 입력창 자동 높이 |
+| 댓글 목록 | 제목 "댓글 N", 상대 시간("3시간 전"), "답글달기", 답글 앞 `@부모작성자`, 글 작성자 `작성자` 뱃지 |
+| ⋮ 메뉴 | 방문자: 링크 복사·신고 / 관리자: 링크 복사·수정·삭제 |
+| 신고 | IP당 댓글 1회·시간당 10건, 첫 신고 메일, 3건이면 자동 숨김, 관리자 댓글 목록 🚩 열·"신고 기록 지우기", 재승인 시 기록 삭제 |
+| 좋아요 | 댓글 영역 위 ♡ 좋아요 / 💬 댓글 N 버튼, IP 해시로 1인 1표, 관리자 글 목록 ♥ 열(정렬)·대시보드 TOP 10, GA4 이벤트 |
+| 캐시 대응 | 숫자·권한은 AJAX로 받아 페이지 캐시와 무관, 등록 직후 `?sg_new`로 캐시 우회, 승인 대기 시 `?sg_pending` 안내, 댓글 변화 시 해당 글만 Cloudflare 캐시 삭제 |
+
+### 버전 이력
+
+| 버전 | 내용 | PR |
+|---|---|---|
+| 1.0.0 | 한국형 댓글 폼·목록 | [#5](https://github.com/kaecode-eng/subculturegamer/pull/5) |
+| 1.1.0 | 좋아요(하트)·댓글 수 버튼, "답글달기", `@멘션`, 상대 시간 | [#5](https://github.com/kaecode-eng/subculturegamer/pull/5) |
+| 1.2.0 | 관리자 글 목록 ♥ 열, 대시보드 TOP 10 | [#5](https://github.com/kaecode-eng/subculturegamer/pull/5) |
+| 1.3.0 | GA4 `post_like`/`post_unlike` 이벤트 | [#5](https://github.com/kaecode-eng/subculturegamer/pull/5) |
+| 1.3.1 | 좋아요 연타 처리(`set` 방식), 버튼 바 중복 출력 방지 | main 직접 커밋 `6b456ab` |
+| 1.3.2 | 관리자 글 목록 좋아요 순 정렬 오류 수정 | [#6](https://github.com/kaecode-eng/subculturegamer/pull/6) |
+| — | README에 GA4 설정 완료 기록 | [#7](https://github.com/kaecode-eng/subculturegamer/pull/7) |
+| 1.4.0 | 댓글 ⋮ 메뉴(링크 복사·신고·수정·삭제), 신고 3건 자동 숨김 | [#8](https://github.com/kaecode-eng/subculturegamer/pull/8) |
+| 1.4.1 | 신고 기록 지우기, 재승인 시 자동 삭제 | [#10](https://github.com/kaecode-eng/subculturegamer/pull/10) |
+| 1.4.2 | 닉네임·이메일 선택 입력, `@익명` 멘션, 등록 직후 캐시 우회 | [#12](https://github.com/kaecode-eng/subculturegamer/pull/12) |
+| 1.4.3 | 댓글 폼 스크립트 버그(`u is not a function`) 수정, 승인 대기 안내 | [#14](https://github.com/kaecode-eng/subculturegamer/pull/14) |
+| 1.5.0 | 댓글 변화 시 해당 글만 Cloudflare 캐시 삭제 | [#16](https://github.com/kaecode-eng/subculturegamer/pull/16) |
+
+### 알아둘 점
+
+- 개발 중 검증은 실제 글 HTML에 코드를 넣은 Playwright 미리보기와 WordPress 함수를 흉내 낸 PHP로 했다. 관리자 화면 기능(♥ 열 정렬, 신고 기록 지우기 등)은 배포 후 사람이 확인했다.
+- 화면(폼·목록·버튼)이 바뀌는 업데이트는 업로드 후 **Cloudflare 캐시 비우기**가 필요하다. 관리자 화면·서버 동작만 바뀌면 필요 없다.
+- 시험 댓글·신고는 실제 메일 알림과 공개가 일어나므로 시크릿 창에서 하고, 끝나면 ⋮ → 삭제로 정리한다.
+- 브런치의 ⋮ 메뉴 중 비회원 본인 댓글 수정·삭제(비밀번호 방식)는 넣지 않았다. 댓글 양에 비해 작업이 커서 보류.
+
 ### 설치·업데이트
 
-1. cPanel 파일 관리자에서 `wp-content/mu-plugins/sg-comments.php`로 업로드(폴더가 없으면 생성). 활성화 절차 없이 바로 적용된다.
+1. GitHub main의 `wordpress/sg-comments.php`를 받아 cPanel 파일 관리자에서 `wp-content/mu-plugins/sg-comments.php`로 업로드(폴더가 없으면 생성). 활성화 절차 없이 바로 적용된다.
    - 또는 Code Snippets/WPCode에 첫 줄 `<?php`를 뺀 나머지를 PHP 스니펫으로 붙여넣는다. 두 방법을 동시에 쓰면 함수 중복으로 사이트가 멈추니 하나만 쓴다.
 2. LiteSpeed 캐시 전체 비우기 → Cloudflare 캐시 비우기.
 3. 글 하나를 열어 하트 클릭 → 새로고침 후에도 숫자가 유지되는지 확인.
