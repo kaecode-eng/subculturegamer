@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.4.0
+ * Version: 1.4.1
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -525,6 +525,47 @@ add_action( 'manage_comments_custom_column', function ( $col, $cid ) {
 		echo $n ? '<strong style="color:#d63638">🚩 ' . esc_html( $n ) . '</strong>' : '<span style="color:#bbb">-</span>';
 	}
 }, 10, 2 );
+// 신고 기록 지우기: 관리자 댓글 목록의 행 버튼 + 숨겨진 댓글을 관리자가 다시 승인하면 자동으로 지운다
+function sg_cmt_clear_reports( $cid ) {
+	delete_comment_meta( $cid, '_sg_reports' );
+	delete_comment_meta( $cid, '_sg_report_keys' );
+}
+
+add_filter( 'comment_row_actions', function ( $actions, $comment ) {
+	if ( (int) get_comment_meta( $comment->comment_ID, '_sg_reports', true ) > 0 && current_user_can( 'edit_comment', $comment->comment_ID ) ) {
+		$url = wp_nonce_url(
+			admin_url( 'admin-post.php?action=sg_reset_reports&c=' . $comment->comment_ID ),
+			'sg_reset_reports_' . $comment->comment_ID
+		);
+		$actions['sg_reset_reports'] = '<a href="' . esc_url( $url ) . '">신고 기록 지우기</a>';
+	}
+	return $actions;
+}, 10, 2 );
+
+add_action( 'admin_post_sg_reset_reports', function () {
+	$cid = isset( $_GET['c'] ) ? absint( $_GET['c'] ) : 0;
+	if ( ! $cid || ! current_user_can( 'edit_comment', $cid ) ) {
+		wp_die( '권한이 없습니다.', 403 );
+	}
+	check_admin_referer( 'sg_reset_reports_' . $cid );
+	sg_cmt_clear_reports( $cid );
+	$back = wp_get_referer() ?: admin_url( 'edit-comments.php' );
+	wp_safe_redirect( add_query_arg( 'sg_reports_cleared', 1, remove_query_arg( 'sg_reports_cleared', $back ) ) );
+	exit;
+} );
+
+add_action( 'admin_notices', function () {
+	if ( ! empty( $_GET['sg_reports_cleared'] ) && current_user_can( 'moderate_comments' ) ) {
+		echo '<div class="notice notice-success is-dismissible"><p>신고 기록을 지웠습니다.</p></div>';
+	}
+} );
+
+add_action( 'transition_comment_status', function ( $new, $old, $comment ) {
+	if ( 'approved' === $new && 'unapproved' === $old && current_user_can( 'moderate_comments' ) ) {
+		sg_cmt_clear_reports( $comment->comment_ID );
+	}
+}, 10, 3 );
+
 add_action( 'admin_head-edit-comments.php', function () {
 	echo '<style>.column-sg_reports{width:5em;text-align:center!important}</style>';
 } );
