@@ -28,7 +28,7 @@ last_updated: 2026-11-17
 
 ## 2026-11 변경 사항
 
-- 게임 연출 시리즈 5편(0편 `game-presenment-5-elements.md`와 `posts/drafts/game-presentation-*` 계열)을 1편으로 통합했다. 통합본 「게임 시나리오 연출 5요소」(`2023-03-24-game-scenario-directing-elements.md`, ID 68)가 2026-11-17 공개되어 등록했다. 옛 URL은 Redirection으로 통합본에 301 연결된다. `game-presenment-5-elements.md`는 공개 URL이 없는 옛 기록이다.
+- 게임 연출 시리즈 5편(0편 `game-presenment-5-elements.md`와 `posts/drafts/game-presentation-*` 계열)을 1편으로 통합했다. 통합본 「게임 시나리오 연출 5요소」(`2023-03-24-game-scenario-directing-elements.md`, ID 68)가 2026-11-17 공개되어 등록했다. 옛 URL은 Redirection으로 통합본에 301 연결된다. 옛 기록 `game-presenment-5-elements.md`는 2026-11-17 삭제했고, 원본 초안 `posts/drafts/game-presentation-*` 7편은 보관한다.
 - 연출 세부 글 2편도 같은 날 공개·등록했다: 이모티콘 연출 가이드(`2023-04-03-character-emoticon-reactions.md`), 다이얼로그 UI 다중 해상도 대응(`2023-04-05-dialogue-ui-multi-resolution.md`). 통합본 본문에서 이모티콘 글로 링크한다.
 - 입문 글 「게임 스토리 연출이란?」(`2026-07-05-what-is-game-story-directing.md`)은 5요소를 짧게 소개하고, 통합본은 같은 5요소를 실무 수준으로 풀어 쓴다. 두 글의 검색어가 겹치므로 서로 역할을 나눠 링크한다(`planning/2026-11-16-directing-merge-into-25.md` 참고).
 - 슬러그 변경: 페나코니 글은 `/penaconey-symbol-metaphor/`로 바뀌었다(파일명은 유지).

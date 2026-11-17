@@ -135,7 +135,7 @@
 2. `camera-work-knowing.md`
 3. `mise-en-scene-cinematography.md`
 
-사례 연결: `game-presenment-5-elements.md`, `starrail-ultimate-analysis.md`, `starrail-firefly-concept-art-8-elements.md`, `penacony-symbol-metaphor.md`, `reverse-1999-lobby-design-analysis.md`.
+사례 연결: `2023-03-24-game-scenario-directing-elements.md`, `starrail-ultimate-analysis.md`, `starrail-firefly-concept-art-8-elements.md`, `penacony-symbol-metaphor.md`, `reverse-1999-lobby-design-analysis.md`.
 
 다음 글 공백: "조명과 색채", "서브컬처 게임 컷신 1장면 분석". 이 두 편이 들어오면 연출 시리즈의 독서 경로가 완성된다.
 
