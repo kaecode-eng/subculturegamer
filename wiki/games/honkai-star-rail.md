@@ -10,12 +10,12 @@ related_posts:
   - starrail-firefly-concept-art-8-elements.md
   - honkai-starrail-event-ui-ux.md
   - penacony-symbol-metaphor.md
-  - starsystem-archeron.md
+  - 2024-04-07-starsystem-archeron.md
 related_wiki:
   - wiki/concepts/onboarding-design.md
   - wiki/concepts/lobby-design.md
   - wiki/games/honkai-impact-3rd.md
-last_updated: 2026-06-16
+last_updated: 2026-11-17
 ---
 
 ## 게임 개요
@@ -30,6 +30,10 @@ last_updated: 2026-06-16
 - **이벤트 UI/UX**: 이벤트 화면 구조와 정보 설계
 - **페나코니 메타포 분석**: '화합의 도시' 배경의 상징 분석
 - **아케론과 스타 시스템**: 가챠 캐릭터 흥행 공식
+
+## 허브
+
+- 8편을 묶는 허브 「붕괴: 스타레일 분석 시리즈」 초안을 작성했다(2026-11-17, 미발행). 1부 플레이 경험 설계(온보딩 1~3, 미리환야담), 2부 연출과 아트(필살기, 반디), 3부 캐릭터와 세계관(아케론, 페나코니). 발행 준비: `planning/2026-11-17-honkai-starrail-hub.md`
 
 ## 분석 미개척 각도
 
