@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.4.2
+ * Version: 1.4.3
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -107,10 +107,15 @@ add_filter( 'render_block_core/comments-title', function ( $html ) {
  *    - 붙인 쿼리는 화면이 뜬 뒤 JS 가 주소창에서 지운다
  * ------------------------------------------------------------- */
 add_filter( 'comment_post_redirect', function ( $location, $comment ) {
-	if ( ! $comment instanceof WP_Comment || '1' !== (string) $comment->comment_approved ) {
+	if ( ! $comment instanceof WP_Comment ) {
 		return $location;
 	}
-	return add_query_arg( 'sg_new', (int) $comment->comment_ID, $location );
+	if ( '1' === (string) $comment->comment_approved ) {
+		return add_query_arg( 'sg_new', (int) $comment->comment_ID, $location );
+	}
+	// 승인 대기(또는 스팸 판정) 댓글: WordPress 는 작성자 이메일이 있어야 "검토 대기" 안내를 보여준다.
+	// 익명·이메일 없는 댓글도 사라진 것처럼 보이지 않도록 안내 표시용 쿼리를 붙인다(스팸 여부는 알리지 않는다).
+	return add_query_arg( 'sg_pending', 1, preg_replace( '/#.*$/', '', $location ) ) . '#respond';
 }, 10, 2 );
 
 /* ---------------------------------------------------------------
@@ -291,6 +296,8 @@ add_action( 'wp_enqueue_scripts', function () {
 #commentform .comment-form-cookies-consent input{margin:0}
 .sg-cf-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:8px 10px 8px 16px;border-top:1px solid #f0f0f3;background:#fafafb}
 .sg-cf-count{font-size:12px;color:var(--sg-sub);margin-right:auto}
+.sg-cf-notice{margin:0 0 12px;padding:12px 16px;border-radius:8px;background:#f0eef5;color:#3d3352;font-size:14px;line-height:1.5}
+.sg-cf-notice strong{color:var(--sg-accent)}
 .sg-cf-count.is-over{color:#d33}
 #commentform .sg-cf-submit{appearance:none;border:0;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:600;line-height:1.4;color:#fff;background:var(--sg-accent);cursor:pointer;transition:opacity .15s}
 #commentform .sg-cf-submit:disabled{background:#cfcfd6;cursor:default}
@@ -303,8 +310,15 @@ CSS;
 
 	$js = <<<JS
 document.addEventListener('DOMContentLoaded',function(){
-  /* 댓글 등록 직후 붙인 캐시 우회 쿼리(sg_new)를 주소창에서 지운다 */
-  try{var u=new URL(location.href);if(u.searchParams.has('sg_new')){u.searchParams.delete('sg_new');history.replaceState(history.state,'',u.pathname+(u.search||'')+u.hash);}}catch(e){}
+  /* 댓글 등록 직후 붙인 쿼리(sg_new: 캐시 우회, sg_pending: 승인 대기 안내)를 처리하고 주소창에서 지운다 */
+  try{var here=new URL(location.href),pend=here.searchParams.has('sg_pending');
+    if(here.searchParams.has('sg_new')||pend){here.searchParams.delete('sg_new');here.searchParams.delete('sg_pending');history.replaceState(history.state,'',here.pathname+(here.search||'')+here.hash);}
+    var r=document.getElementById('respond');
+    if(pend&&r){var n=document.createElement('div');n.className='sg-cf-notice';n.setAttribute('role','status');
+      n.innerHTML='<strong>댓글이 등록됐습니다.</strong> 운영자 확인 후 공개됩니다.';
+      var h=r.querySelector('.comment-reply-title');if(h)h.insertAdjacentElement('afterend',n);else r.prepend(n);
+      r.scrollIntoView({block:'start'});}
+  }catch(e){}
   /* 상대 시간: 캐시된 페이지에서도 정확하도록 브라우저에서 계산 */
   document.querySelectorAll('.wp-block-comment-date time[datetime]').forEach(function(el){
     var t=new Date(el.getAttribute('datetime')),d=(Date.now()-t)/1000,a=el.querySelector('a')||el,s;
