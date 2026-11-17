@@ -101,6 +101,19 @@ add_filter( 'render_block_core/comments-title', function ( $html ) {
 } );
 
 /* ---------------------------------------------------------------
+ * 2-1. 댓글 등록 직후 캐시된 옛 페이지가 보이지 않게 하기
+ *    - Cloudflare 가 글 페이지를 최대 10분 캐시하므로, 등록 후 돌아가는 주소에 쿼리를 붙여 캐시를 건너뛴다
+ *    - 승인 대기 댓글은 WordPress 가 이미 unapproved/moderation-hash 쿼리를 붙이므로 건드리지 않는다
+ *    - 붙인 쿼리는 화면이 뜬 뒤 JS 가 주소창에서 지운다
+ * ------------------------------------------------------------- */
+add_filter( 'comment_post_redirect', function ( $location, $comment ) {
+	if ( ! $comment instanceof WP_Comment || '1' !== (string) $comment->comment_approved ) {
+		return $location;
+	}
+	return add_query_arg( 'sg_new', (int) $comment->comment_ID, $location );
+}, 10, 2 );
+
+/* ---------------------------------------------------------------
  * 3. 답글 UX: "답글" → "답글달기", 답글 앞에 @부모댓글작성자
  * ------------------------------------------------------------- */
 add_filter( 'comment_reply_link_args', function ( $args ) {
@@ -290,6 +303,8 @@ CSS;
 
 	$js = <<<JS
 document.addEventListener('DOMContentLoaded',function(){
+  /* 댓글 등록 직후 붙인 캐시 우회 쿼리(sg_new)를 주소창에서 지운다 */
+  try{var u=new URL(location.href);if(u.searchParams.has('sg_new')){u.searchParams.delete('sg_new');history.replaceState(history.state,'',u.pathname+(u.search||'')+u.hash);}}catch(e){}
   /* 상대 시간: 캐시된 페이지에서도 정확하도록 브라우저에서 계산 */
   document.querySelectorAll('.wp-block-comment-date time[datetime]').forEach(function(el){
     var t=new Date(el.getAttribute('datetime')),d=(Date.now()-t)/1000,a=el.querySelector('a')||el,s;
