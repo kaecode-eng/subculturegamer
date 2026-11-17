@@ -14,13 +14,14 @@ related_posts:
   - 2023-04-12-honkai-3rd-return-system-reverse-design-step-2.md
   - 2023-04-13-honkai-3rd-return-system-reverse-design-step-3.md
   - 2023-04-14-honkai-3rd-return-system-reverse-design-step-4.md
+  - 2024-04-07-starsystem-archeron.md
 related_wiki:
   - wiki/games/honkai-star-rail.md
   - wiki/games/brawl-stars.md
   - wiki/concepts/onboarding-design.md
   - wiki/techniques/3c-analysis.md
   - wiki/series-threads/honkai3rd-return-system-reverse-design-series.md
-last_updated: 2026-11-12
+last_updated: 2026-11-17
 ---
 
 ## 게임 개요
