@@ -1,7 +1,7 @@
 # 붕괴: 스타레일 허브 발행 준비 (2026-11-17)
 
 - 근거: `planning/series-tracker.md`의 허브 예정 목록, `planning/taxonomy/2026-11-12-taxonomy-proposal.md` 2-6(추천 슬러그 `/honkai-starrail-series/`, 태그 붕괴: 스타레일 = 8편으로 허브 범위와 같음)
-- **사이트 미발행.** 클라우드 세션은 WordPress 쓰기가 막혀 있어(`docs/work-context.md`) 붙여 넣을 파일만 만들었다. 발행은 데스크톱 앱 세션이나 관리자 화면에서 한다.
+- **발행 완료(2026-11-17).** 데스크톱 앱 세션에서 임시글로 저장한 뒤 사용자 확인을 거쳐 발행했다. 허브와 연결 글 끝 조각, 대표 이미지 설정을 공개 REST로 확인했고 허브 안 링크는 모두 200(리다이렉트 없음). `/register`로 `posts/published/`에 등록했다.
 
 ## 1. 파일
 
