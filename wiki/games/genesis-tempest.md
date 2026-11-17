@@ -8,9 +8,10 @@ related_posts:
   - genesis-tempest-game-analysis-3.md
   - genesis-tempest-charter-analysis.md
   - tempest-post-mortem.md
+  - 2026-11-17-genesis-tempest-series.md
 related_wiki:
   - wiki/concepts/narrative-design.md
-last_updated: 2026-06-16
+last_updated: 2026-11-17
 ---
 
 ## 게임 개요

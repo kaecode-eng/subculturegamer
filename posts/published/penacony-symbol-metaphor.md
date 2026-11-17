@@ -6,8 +6,8 @@ categories: []
 tags: ["게임 디자인"]
 related_posts: []
 wiki_refs: []
-series: ""
-series_order: null
+series: "붕괴: 스타레일 분석"
+series_order: 8
 ---
 
 ![페나코니 표지](https://ml8x8mnjupht.i.optimole.com/ug8dphQ-Es7Ztk1F/w:auto/h:auto/q:auto/co:1/sa:1/id:df8d8b7e38c5a85c795a214e64f5a656/https://subculturegamer.com//id:df8d8b7e38c5a85c795a214e64f5a656/https://subculturegamer.com/starrail-image-1714181673.avif.webp)

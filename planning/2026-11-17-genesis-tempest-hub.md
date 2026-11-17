@@ -1,7 +1,7 @@
 # 창세기전 템페스트 허브 발행 준비 (2026-11-17)
 
 - 근거: `planning/series-tracker.md`의 허브 예정 목록, `planning/taxonomy/2026-11-12-taxonomy-proposal.md` 2-6(추천 슬러그 `/genesis-tempest-series/`, 허브 이름 "창세기전 템페스트", 범위는 분석 4편, `tempest-post-mortem`은 허브에서 제외하고 태그만 유지 — 2026-11-12 사용자 결정)
-- **사이트 미발행.** 클라우드 세션은 WordPress 쓰기가 막혀 있어(`docs/work-context.md`) 붙여 넣을 파일만 만들었다. 발행은 데스크톱 앱 세션이나 관리자 화면에서 한다.
+- **발행 완료(2026-11-17).** 데스크톱 앱 세션에서 임시글로 저장한 뒤 사용자 확인을 거쳐 발행했다. 허브와 연결 글 끝 조각, 대표 이미지 설정을 공개 REST로 확인했고 허브 안 링크는 모두 200(리다이렉트 없음). `/register`로 `posts/published/`에 등록했다.
 
 ## 1. 파일
 

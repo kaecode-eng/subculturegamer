@@ -7,10 +7,11 @@ related_posts:
   - honkai-starrail-onboarding-experience-analysis-2.md
   - honkai-starrail-onboarding-experience-analysis-3.md
   - honkai-starrail-event-ui-ux.md
+  - 2026-11-17-honkai-starrail-series.md
 related_wiki:
   - wiki/games/honkai-star-rail.md
   - wiki/concepts/onboarding-design.md
-last_updated: 2026-07-17
+last_updated: 2026-11-17
 ---
 
 붕괴: 스타레일의 초반 경험을 세 편으로 나누어 분석한 시리즈다. 온보딩이 튜토리얼 문구가 아니라 플레이어가 게임에 정착하도록 만드는 전체 경험임을 다룬다.

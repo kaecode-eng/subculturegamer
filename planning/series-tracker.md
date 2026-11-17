@@ -1,6 +1,6 @@
 # 연재 시리즈 트래커
 
-> 2026-11-17 기준 업데이트 (게임 연출 통합본 등 비공개였던 4편 공개·등록)
+> 2026-11-17 기준 업데이트 (붕괴: 스타레일·창세기전 템페스트 허브 발행)
 
 ---
 
@@ -139,6 +139,10 @@
 - 섬네일 통일 완료, 허브에서 엑셀 예제 제공
 - 연결: [[wiki/series-threads/honkai3rd-return-system-reverse-design-series.md]], [[wiki/games/honkai-impact-3rd.md]]
 
+### 붕괴: 스타레일 분석 시리즈 ✓ (허브 2026-11-17)
+허브 `2026-11-17-honkai-starrail-series.md` (`/honkai-starrail-series/`, ID 26157). 1부 온보딩 1~3·미리환야담(4), 2부 필살기(5)·반디(6), 3부 아케론(7)·페나코니(8). 8편 끝에 허브 링크 문단. 온보딩 3편은 자체 연재 번호(1~3)를 유지하고 나머지 5편은 `series: "붕괴: 스타레일 분석"` 4~8
+- 연결: [[wiki/games/honkai-star-rail.md]]
+
 ### 붕괴: 스타레일 온보딩 시리즈 ✓
 3편 완결 (2023-05)
 - 연결: [[wiki/games/honkai-star-rail.md]]
@@ -154,7 +158,7 @@
 - 연결: [[wiki/games/rance-x.md]], [[wiki/series-threads/rance-x-system-analysis-series.md]]
 
 ### 창세기전 템페스트 분석 시리즈 ✓
-4편 완결 (2023-08)
+4편 완결 (2023-08). 허브 `2026-11-17-genesis-tempest-series.md` (`/genesis-tempest-series/`, ID 26160) 2026-11-17 발행, 분석 4편 끝에 허브 링크 문단. 포스트모템은 허브의 「함께 읽으면 좋은 글」로만 연결
 - 게임 분석 3편 + 캐릭터 분석
 - 연결: [[wiki/games/genesis-tempest.md]], [[wiki/series-threads/genesis-tempest-analysis-series.md]]
 
@@ -166,5 +170,5 @@
 
 ## 허브 후보 (제안 상태)
 
-- 붕괴: 스타레일 허브 (8편): 온보딩 1~3, 이벤트 UI/UX, 필살기 연출, 반디 컨셉 아트, 아케론 스타 시스템, 페나코니 메타포 → [[wiki/games/honkai-star-rail.md]] — 2026-11-17 초안 작성(`posts/drafts/2026-11-17-honkai-starrail-series.md`), 발행 대기. 준비 문서 `planning/2026-11-17-honkai-starrail-hub.md`
-- 창세기전 템페스트 허브 (4편, 이름 확정): 게임 분석 1~3, 캐릭터 분석. 포스트모템은 허브에서 제외 → [[wiki/series-threads/genesis-tempest-analysis-series.md]] — 2026-11-17 초안 작성(`posts/drafts/2026-11-17-genesis-tempest-series.md`), 발행 대기. 준비 문서 `planning/2026-11-17-genesis-tempest-hub.md`
+- 붕괴: 스타레일 허브 ✓ 2026-11-17 발행 → 위 「붕괴: 스타레일 분석 시리즈」
+- 창세기전 템페스트 허브 ✓ 2026-11-17 발행 → 위 「창세기전 템페스트 분석 시리즈」

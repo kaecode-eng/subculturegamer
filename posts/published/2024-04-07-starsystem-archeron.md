@@ -12,8 +12,8 @@ related_posts:
 wiki_refs:
   - wiki/games/honkai-star-rail
   - wiki/games/honkai-impact-3rd
-series: ""
-series_order: null
+series: "붕괴: 스타레일 분석"
+series_order: 7
 ---
 ## 들어가는 글
 
