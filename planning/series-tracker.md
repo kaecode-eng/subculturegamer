@@ -103,7 +103,8 @@
 - 세부 글 2편도 같은 날 공개·등록: 이모티콘 연출 가이드(`2023-04-03-character-emoticon-reactions.md`, ID 352), 다이얼로그 UI 다중 해상도 대응(`2023-04-05-dialogue-ui-multi-resolution.md`, ID 445)
 - 옛 URL 6개(`/game-directing-*` 5개, `/game-presenment-5-elements/`)와 폰트 글 URL은 Redirection으로 통합본·445에 301 연결(2026-11-17 확인, 모두 200 도착)
 - 입문 글 「게임 스토리 연출이란?」(25)과 5요소 주제가 겹친다. 25에 실무 문단을 옮기는 대신, 25의 5요소 소개 앞에 68 링크 문장을 넣어 역할을 나눴다(2026-11-17 사이트 반영 확인). 수정본 `posts/drafts/2026-11-16-what-is-game-story-directing-update.html`은 쓰지 않는다
-- [ ] 남은 결정: `game-presenment-5-elements.md`(공개 URL 없는 옛 기록)와 `posts/drafts/game-presentation-*` 7편의 보관/삭제, 옛 연출 5편·폰트 글(140, 170, 185, 201, 215, 223) 휴지통 이동
+- [x] 저장소 정리(2026-11-17): 옛 기록 `game-presenment-5-elements.md` 삭제, 원본 초안 `posts/drafts/game-presentation-*` 7편은 통합본의 원고로 보관(발행 대상 아님)
+- [ ] 남은 결정: 사이트의 옛 연출 5편·폰트 글(140, 170, 185, 201, 215, 223) 휴지통 이동
 - 연결: [[wiki/series-threads/game-direction-and-subculture-character-hub.md]]
 
 ---
