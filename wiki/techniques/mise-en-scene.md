@@ -6,13 +6,13 @@ related_posts:
   - why-should-game-designer-know-mise-en-scene.md
   - camera-work-knowing.md
   - mise-en-scene-cinematography.md
-  - game-presenment-5-elements.md
+  - 2023-03-24-game-scenario-directing-elements.md
 related_wiki:
   - wiki/series-threads/mise-en-scene-series.md
   - wiki/series-threads/game-direction-and-subculture-character-hub.md
   - wiki/series-threads/game-analysis-concept-and-art-hub.md
   - wiki/concepts/narrative-design.md
-last_updated: 2026-06-16
+last_updated: 2026-11-17
 ---
 
 ## 개념 설명

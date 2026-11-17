@@ -20,13 +20,15 @@ related_posts:
   - 2026-09-06-character-dialogue-writing-guide.md
   - 2026-09-13-game-design-presentation-listener-strategy.md
   - 2026-09-27-game-company-probation-period-retrospective.md
+  - 2023-03-24-game-scenario-directing-elements.md
+  - 2023-04-05-dialogue-ui-multi-resolution.md
 related_wiki:
   - wiki/concepts/lore-design.md
   - wiki/concepts/quest-design.md
   - wiki/series-threads/setting-designer-series.md
   - wiki/series-threads/narrative-designer-growth-hub.md
   - wiki/series-threads/game-analysis-character-and-narrative-hub.md
-last_updated: 2026-09-27
+last_updated: 2026-11-17
 ---
 
 ## 개념 설명
