@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SG Comments (한국형 댓글 UI)
  * Description: 워드프레스 기본 댓글 폼·목록을 네이버 블로그/티스토리/브런치에 익숙한 형태로 바꾼다.
- * Version: 1.4.3
+ * Version: 1.5.0
  *
  * 설치: wp-content/mu-plugins/sg-comments.php 로 업로드하거나,
  *       Code Snippets/WPCode에 "<?php" 줄을 뺀 나머지를 PHP 스니펫으로 붙여넣는다.
@@ -694,3 +694,126 @@ JS;
 	wp_enqueue_script( 'sg-comments-menu' );
 	wp_add_inline_script( 'sg-comments-menu', $js );
 }, 20 );
+
+/* ---------------------------------------------------------------
+ * 8. 댓글 변화 시 Cloudflare 에서 해당 글 주소만 캐시 삭제
+ *    - LiteSpeed Cache 의 Cloudflare 연동은 "모두 비우기" 때만 Cloudflare 를 비우므로,
+ *      댓글이 공개·수정·삭제·숨김될 때 그 글 URL 하나만 지운다
+ *    - API 키·영역(zone)·이메일은 LiteSpeed Cache → CDN → Cloudflare 에 저장된 값을 그대로 쓴다
+ *    - 응답을 먼저 보낸 뒤(shutdown) 요청하므로 댓글 등록 속도에 영향이 없다
+ *    - 마지막 결과는 옵션 sg_cf_purge_last 에 남는다(문제 확인용)
+ * ------------------------------------------------------------- */
+function sg_cf_conf( $id ) {
+	$val = apply_filters( 'litespeed_conf', $id );
+	if ( $val === $id || null === $val ) { // LiteSpeed API 가 없으면 필터가 입력값을 그대로 돌려준다
+		$val = get_option( 'litespeed.conf.' . $id );
+	}
+	return is_string( $val ) ? trim( $val ) : $val;
+}
+
+function sg_cf_queue_post( $post_id ) {
+	static $hooked = false;
+	$post_id = (int) $post_id;
+	if ( ! $post_id || 'publish' !== get_post_status( $post_id ) ) {
+		return;
+	}
+	$GLOBALS['sg_cf_purge_posts'][ $post_id ] = true;
+	if ( ! $hooked ) {
+		$hooked = true;
+		add_action( 'shutdown', 'sg_cf_purge_queued', 100 );
+	}
+}
+
+function sg_cf_purge_queued() {
+	$ids = array_keys( $GLOBALS['sg_cf_purge_posts'] ?? array() );
+	if ( ! $ids || ! sg_cf_conf( 'cdn-cloudflare' ) ) {
+		return;
+	}
+	$key  = (string) sg_cf_conf( 'cdn-cloudflare_key' );
+	$zone = (string) sg_cf_conf( 'cdn-cloudflare_zone' );
+	$mail = (string) sg_cf_conf( 'cdn-cloudflare_email' );
+	if ( '' === $key || ! preg_match( '/^[a-f0-9]{32}$/i', $zone ) ) {
+		update_option( 'sg_cf_purge_last', array( 'time' => time(), 'ok' => false, 'error' => 'LiteSpeed Cloudflare 설정(키/영역) 없음' ), false );
+		return;
+	}
+	$urls = array();
+	foreach ( $ids as $id ) {
+		$url = get_permalink( $id );
+		if ( $url ) {
+			$urls[] = $url;
+		}
+	}
+	if ( ! $urls ) {
+		return;
+	}
+	// 글로벌 API 키(37자리 16진수)+이메일이면 X-Auth 헤더, 아니면 API 토큰(Bearer)
+	$headers = array( 'Content-Type' => 'application/json' );
+	if ( '' !== $mail && preg_match( '/^[a-f0-9]{37}$/i', $key ) ) {
+		$headers['X-Auth-Email'] = $mail;
+		$headers['X-Auth-Key']   = $key;
+	} else {
+		$headers['Authorization'] = 'Bearer ' . $key;
+	}
+	// 방문자에게 응답을 먼저 보내고 나서 Cloudflare 에 요청한다
+	if ( function_exists( 'litespeed_finish_request' ) ) {
+		litespeed_finish_request();
+	} elseif ( function_exists( 'fastcgi_finish_request' ) ) {
+		fastcgi_finish_request();
+	}
+	$res  = wp_remote_post(
+		'https://api.cloudflare.com/client/v4/zones/' . $zone . '/purge_cache',
+		array(
+			'headers' => $headers,
+			'body'    => wp_json_encode( array( 'files' => array_values( $urls ) ) ),
+			'timeout' => 8,
+		)
+	);
+	$body = is_wp_error( $res ) ? null : json_decode( wp_remote_retrieve_body( $res ), true );
+	update_option( 'sg_cf_purge_last', array(
+		'time'  => time(),
+		'urls'  => $urls,
+		'ok'    => ! empty( $body['success'] ),
+		'code'  => is_wp_error( $res ) ? 0 : wp_remote_retrieve_response_code( $res ),
+		'error' => is_wp_error( $res ) ? $res->get_error_message() : ( $body['errors'][0]['message'] ?? '' ),
+	), false );
+}
+
+// 새 댓글이 바로 공개될 때
+add_action( 'comment_post', function ( $cid, $approved ) {
+	if ( 1 === $approved || '1' === $approved ) {
+		$c = get_comment( $cid );
+		if ( $c ) {
+			sg_cf_queue_post( $c->comment_post_ID );
+		}
+	}
+}, 10, 2 );
+
+// 공개 상태가 바뀔 때(승인, 대기로 숨김, 스팸, 휴지통, 복원)
+add_action( 'transition_comment_status', function ( $new, $old, $comment ) {
+	if ( $new !== $old && ( 'approved' === $new || 'approved' === $old ) ) {
+		sg_cf_queue_post( $comment->comment_post_ID );
+	}
+}, 10, 3 );
+
+// 공개된 댓글의 내용을 수정할 때
+add_action( 'edit_comment', function ( $cid ) {
+	$c = get_comment( $cid );
+	if ( $c && '1' === (string) $c->comment_approved ) {
+		sg_cf_queue_post( $c->comment_post_ID );
+	}
+} );
+
+// 관리자 댓글 화면 아래에 마지막 Cloudflare 캐시 삭제 결과 표시(문제 확인용)
+add_action( 'admin_footer-edit-comments.php', function () {
+	$last = get_option( 'sg_cf_purge_last' );
+	if ( ! is_array( $last ) || ! current_user_can( 'moderate_comments' ) ) {
+		return;
+	}
+	printf(
+		'<p style="margin:16px 20px;color:%s">Cloudflare 캐시 삭제(댓글): %s · %s%s</p>',
+		$last['ok'] ? '#2271b1' : '#d63638',
+		$last['ok'] ? '성공' : '실패',
+		esc_html( wp_date( 'Y-m-d H:i:s', $last['time'] ) ),
+		$last['ok'] ? '' : ' · ' . esc_html( ( $last['code'] ?? '' ) . ' ' . ( $last['error'] ?? '' ) )
+	);
+} );
